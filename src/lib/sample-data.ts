@@ -16,6 +16,8 @@ export const defaultCategories: Category[] = [
   { id: 'cat-projects', name: 'Projects', color: '#8b5cf6' },
 ];
 
+export const defaultPlatforms: string[] = ['Cognos', 'MicroStrategy', 'Tableau'];
+
 export const defaultSettings: UserSettings = {
   userName: 'Kaushal',
   theme: 'dark',

@@ -22,6 +22,9 @@ import {
   ChevronDown,
   ChevronUp,
   Sparkles,
+  GitMerge,
+  GitPullRequest,
+  Layers,
 } from 'lucide-react';
 import { format, addDays } from 'date-fns';
 
@@ -35,6 +38,8 @@ export const TaskDetailModal: React.FC = () => {
     deleteTask,
     duplicateTask,
     categories,
+    platforms,
+    addPlatform,
     settings,
   } = useApp();
 
@@ -43,6 +48,10 @@ export const TaskDetailModal: React.FC = () => {
   // Form State
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [platform, setPlatform] = useState('Cognos');
+  const [codeMerged, setCodeMerged] = useState(false);
+  const [isAddingPlatform, setIsAddingPlatform] = useState(false);
+  const [newPlatformInput, setNewPlatformInput] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [dueTime, setDueTime] = useState('');
   const [priority, setPriority] = useState<Priority>('medium');
@@ -67,6 +76,8 @@ export const TaskDetailModal: React.FC = () => {
     if (selectedTask && selectedTask.id) {
       setTitle(selectedTask.title || '');
       setDescription(selectedTask.description || '');
+      setPlatform(selectedTask.platform || '');
+      setCodeMerged(Boolean(selectedTask.codeMerged));
       setDueDate(selectedTask.dueDate || '');
       setDueTime(selectedTask.dueTime || '');
       setPriority(selectedTask.priority || 'medium');
@@ -80,9 +91,12 @@ export const TaskDetailModal: React.FC = () => {
       setNotes(selectedTask.notes || '');
       setShowAdvanced(true); // Always show details when editing
     } else {
-      // Fast defaults for brand new task: Default to Work, Today, Medium priority
+      // Fast defaults for brand new task: Default to Cognos/first platform, Work, Today, Normal priority
+      const initialPlatform = selectedTask?.platform || (platforms.length > 0 ? platforms[0] : 'Cognos');
       setTitle(selectedTask?.title || '');
       setDescription('');
+      setPlatform(initialPlatform);
+      setCodeMerged(Boolean(selectedTask?.codeMerged || false));
       setDueDate(selectedTask?.dueDate || todayStr);
       setDueTime('');
       setPriority(selectedTask?.priority || settings.defaultPriority || 'medium');
@@ -96,7 +110,7 @@ export const TaskDetailModal: React.FC = () => {
       setNotes('');
       setShowAdvanced(false); // Clean and minimal by default
     }
-  }, [selectedTask, settings.defaultPriority, isTaskModalOpen, todayStr]);
+  }, [selectedTask, settings.defaultPriority, isTaskModalOpen, todayStr, platforms]);
 
   // Subtask handlers
   const handleAddSubtask = (e: React.FormEvent) => {
@@ -139,6 +153,16 @@ export const TaskDetailModal: React.FC = () => {
     setTags(tags.filter((t) => t !== tagToRemove));
   };
 
+  const handleCreateNewPlatform = () => {
+    const trimmed = newPlatformInput.trim();
+    if (trimmed) {
+      addPlatform(trimmed);
+      setPlatform(trimmed);
+    }
+    setIsAddingPlatform(false);
+    setNewPlatformInput('');
+  };
+
   // Submit
   const handleSave = () => {
     if (!title.trim()) return;
@@ -146,6 +170,8 @@ export const TaskDetailModal: React.FC = () => {
     const payload = {
       title: title.trim(),
       description,
+      platform: platform || undefined,
+      codeMerged,
       dueDate: dueDate || undefined,
       dueTime: dueTime || undefined,
       priority,
@@ -296,6 +322,126 @@ export const TaskDetailModal: React.FC = () => {
                 {label}
               </button>
             ))}
+          </div>
+
+          {/* Field / Tool (Cognos, MicroStrategy, Tableau, etc.) */}
+          <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800/80">
+            <span className="text-[11px] font-semibold text-zinc-400 w-16 shrink-0 flex items-center gap-1">
+              <Layers className="w-3 h-3 text-indigo-500" />
+              <span>Field:</span>
+            </span>
+
+            {/* Platform pills */}
+            {platforms.map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => setPlatform(platform === p ? '' : p)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                  platform === p
+                    ? 'bg-blue-600 text-white font-semibold shadow-2xs'
+                    : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700'
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => setPlatform('')}
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                !platform
+                  ? 'bg-zinc-600 text-white font-semibold shadow-2xs'
+                  : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400'
+              }`}
+            >
+              None
+            </button>
+
+            {/* Inline Add Field Icon Button */}
+            {!isAddingPlatform ? (
+              <button
+                type="button"
+                onClick={() => setIsAddingPlatform(true)}
+                title="Add manual field/tool (e.g. Power BI, dbt, etc.) so you don't have to change code"
+                className="flex items-center gap-1 px-2 py-1 rounded-lg border border-dashed border-indigo-300 dark:border-indigo-700/60 bg-indigo-50/50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100/60 text-xs font-semibold transition-all cursor-pointer"
+              >
+                <Plus className="w-3 h-3" />
+                <span>Add</span>
+              </button>
+            ) : (
+              <div className="flex items-center gap-1 animate-in fade-in duration-150">
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="e.g. Power BI..."
+                  value={newPlatformInput}
+                  onChange={(e) => setNewPlatformInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleCreateNewPlatform();
+                    } else if (e.key === 'Escape') {
+                      setIsAddingPlatform(false);
+                      setNewPlatformInput('');
+                    }
+                  }}
+                  className="h-7 w-28 px-2 rounded-lg border border-indigo-400 bg-white text-xs text-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={handleCreateNewPlatform}
+                  className="px-2 py-1 rounded-lg bg-indigo-600 text-white text-[11px] font-semibold hover:bg-indigo-500"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsAddingPlatform(false);
+                    setNewPlatformInput('');
+                  }}
+                  className="p-1 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Code Merged or Not */}
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-[11px] font-semibold text-zinc-400 w-16 shrink-0 flex items-center gap-1">
+              <GitMerge className="w-3 h-3 text-emerald-500" />
+              <span>Code:</span>
+            </span>
+
+            <button
+              type="button"
+              onClick={() => setCodeMerged(false)}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                !codeMerged
+                  ? 'bg-amber-500 text-white font-semibold shadow-xs'
+                  : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+              }`}
+            >
+              <GitPullRequest className="w-3 h-3" />
+              <span>Not Merged</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCodeMerged(true)}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                codeMerged
+                  ? 'bg-emerald-600 text-white font-semibold shadow-xs'
+                  : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+              }`}
+            >
+              <GitMerge className="w-3 h-3" />
+              <span>✓ Code Merged</span>
+            </button>
           </div>
 
           {/* Category Shortcuts */}

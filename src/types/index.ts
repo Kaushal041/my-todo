@@ -39,6 +39,8 @@ export interface Task {
   actualMinutes?: number;
   dependencies?: string[]; // IDs of tasks that must be done first
   color?: string;
+  platform?: string; // e.g. "Cognos", "MicroStrategy", "Tableau" or custom field
+  codeMerged?: boolean; // true = Code merged, false = Not merged / pending
   completedAt?: string;
   archived: boolean;
   inTrash: boolean;

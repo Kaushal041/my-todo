@@ -4,6 +4,8 @@ export function exportTasksToCSV(tasks: Task[]) {
   const headers = [
     'ID',
     'Title',
+    'Field/Platform',
+    'Code Merged',
     'Status',
     'Priority',
     'Category',
@@ -21,6 +23,8 @@ export function exportTasksToCSV(tasks: Task[]) {
   const rows = tasks.map((t) => [
     `"${t.id}"`,
     `"${(t.title || '').replace(/"/g, '""')}"`,
+    `"${t.platform || 'None'}"`,
+    t.codeMerged ? 'Yes' : 'No',
     `"${t.status}"`,
     `"${t.priority}"`,
     `"${t.category}"`,
@@ -61,6 +65,7 @@ export function exportFullBackupJSON(data: {
   focusSessions: FocusSession[];
   journal: JournalEntry[];
   settings: UserSettings;
+  platforms?: string[];
 }) {
   const jsonContent = JSON.stringify(
     {

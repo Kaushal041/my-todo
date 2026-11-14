@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS public.tasks (
   actual_minutes INT DEFAULT 0,
   dependencies TEXT[] DEFAULT ARRAY[]::TEXT[],
   color TEXT,
+  platform TEXT,
+  code_merged BOOLEAN DEFAULT FALSE,
   completed_at TIMESTAMPTZ,
   archived BOOLEAN DEFAULT FALSE,
   in_trash BOOLEAN DEFAULT FALSE,

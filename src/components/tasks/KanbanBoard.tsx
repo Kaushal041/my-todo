@@ -12,6 +12,9 @@ import {
   Clock,
   Sparkles,
   Trash2,
+  GitMerge,
+  GitPullRequest,
+  Layers,
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -23,6 +26,7 @@ export const KanbanBoard: React.FC = () => {
     openCreateTaskModal,
     openEditTaskModal,
     toggleTaskComplete,
+    toggleCodeMerged,
   } = useApp();
 
   const [groupBy, setGroupBy] = useState<'status' | 'priority'>('status');
@@ -177,6 +181,16 @@ export const KanbanBoard: React.FC = () => {
                           </button>
                         </div>
 
+                        {/* Platform / Field Badge */}
+                        {task.platform && (
+                          <div className="mt-1 flex items-center gap-1">
+                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/40">
+                              <Layers className="w-2.5 h-2.5 text-blue-500" />
+                              <span>{task.platform}</span>
+                            </span>
+                          </div>
+                        )}
+
                         {task.description && (
                           <p className="mt-1.5 text-[11px] text-zinc-400 line-clamp-2">
                             {task.description}
@@ -187,6 +201,30 @@ export const KanbanBoard: React.FC = () => {
                         <div className="mt-3 pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
                           <div className="flex items-center gap-1.5">
                             <Badge variant="priority" priority={task.priority} />
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleCodeMerged(task.id);
+                              }}
+                              title={
+                                task.codeMerged
+                                  ? 'Code is merged (Click to toggle)'
+                                  : 'Code NOT merged (Click to mark merged)'
+                              }
+                              className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-full border transition-all cursor-pointer ${
+                                task.codeMerged
+                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/50'
+                                  : 'bg-zinc-100 text-zinc-500 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700'
+                              }`}
+                            >
+                              {task.codeMerged ? (
+                                <GitMerge className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" />
+                              ) : (
+                                <GitPullRequest className="w-2.5 h-2.5 text-amber-500" />
+                              )}
+                              <span>{task.codeMerged ? 'Merged' : 'Pending'}</span>
+                            </button>
                             {task.subtasks.length > 0 && (
                               <span className="flex items-center gap-1 font-mono text-[10px]">
                                 <ListTodo className="w-3 h-3" />
@@ -281,10 +319,46 @@ export const KanbanBoard: React.FC = () => {
                           </button>
                         </div>
 
+                        {/* Platform / Field Badge */}
+                        {task.platform && (
+                          <div className="mt-1 flex items-center gap-1">
+                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/40">
+                              <Layers className="w-2.5 h-2.5 text-blue-500" />
+                              <span>{task.platform}</span>
+                            </span>
+                          </div>
+                        )}
+
                         <div className="mt-3 pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
-                            #{task.category}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                              #{task.category}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleCodeMerged(task.id);
+                              }}
+                              title={
+                                task.codeMerged
+                                  ? 'Code is merged (Click to toggle)'
+                                  : 'Code NOT merged (Click to mark merged)'
+                              }
+                              className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-full border transition-all cursor-pointer ${
+                                task.codeMerged
+                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/50'
+                                  : 'bg-zinc-100 text-zinc-500 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700'
+                              }`}
+                            >
+                              {task.codeMerged ? (
+                                <GitMerge className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" />
+                              ) : (
+                                <GitPullRequest className="w-2.5 h-2.5 text-amber-500" />
+                              )}
+                              <span>{task.codeMerged ? 'Merged' : 'Pending'}</span>
+                            </button>
+                          </div>
 
                           <div className="flex items-center gap-2">
                             {task.dueDate && (

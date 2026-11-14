@@ -3,15 +3,17 @@
 import React, { useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { parseNaturalLanguageTask } from '@/lib/natural-language';
-import { Plus, Sparkles, Calendar, Clock, Tag } from 'lucide-react';
+import { Plus, Sparkles, Calendar, Clock, Tag, Layers, GitMerge } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 
 export const QuickAddTask: React.FC = () => {
-  const { addTask } = useApp();
+  const { addTask, platforms } = useApp();
   const [inputVal, setInputVal] = useState('');
 
   // Live parsed preview
   const parsed = inputVal.trim() ? parseNaturalLanguageTask(inputVal) : null;
+  const matchedPlatform = platforms.find((p) => inputVal.toLowerCase().includes(p.toLowerCase()));
+  const isCodeMerged = /\b(merged|code merged)\b/i.test(inputVal);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +26,8 @@ export const QuickAddTask: React.FC = () => {
       dueTime: data.dueTime,
       priority: data.priority,
       category: data.category || 'Work',
+      platform: matchedPlatform || (platforms.length > 0 ? platforms[0] : 'Cognos'),
+      codeMerged: isCodeMerged,
       tags: data.tags,
     });
 
@@ -54,7 +58,7 @@ export const QuickAddTask: React.FC = () => {
       </form>
 
       {/* Quick Work Helpers (when not yet typed or detected) */}
-      {!parsed || (!parsed.dueDate && !parsed.priority && !parsed.category && parsed.tags.length === 0) ? (
+      {!parsed || (!parsed.dueDate && !parsed.priority && !parsed.category && parsed.tags.length === 0 && !matchedPlatform && !isCodeMerged) ? (
         <div className="mt-2.5 pt-2 border-t border-zinc-100 dark:border-zinc-800/60 flex flex-wrap items-center gap-1.5 text-xs text-zinc-500">
           <span className="text-[11px] text-zinc-400 mr-0.5">Quick append:</span>
           <button
@@ -78,12 +82,25 @@ export const QuickAddTask: React.FC = () => {
           >
             ! urgent
           </button>
+
+          {/* Quick Platform Chips */}
+          {platforms.map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} ${p}` : `${p} `))}
+              className="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-300 text-[11px] font-medium transition-colors"
+            >
+              {p}
+            </button>
+          ))}
+
           <button
             type="button"
-            onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} #work` : '#work '))}
-            className="px-2 py-0.5 rounded-md bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-[11px] font-medium transition-colors"
+            onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} merged` : 'merged '))}
+            className="px-2 py-0.5 rounded-md bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 text-[11px] font-medium transition-colors"
           >
-            # work
+            ✓ merged
           </button>
         </div>
       ) : (
@@ -91,6 +108,20 @@ export const QuickAddTask: React.FC = () => {
           <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 mr-1">
             Detected:
           </span>
+
+          {matchedPlatform && (
+            <Badge variant="outline" className="gap-1 bg-blue-50/70 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-200/50">
+              <Layers className="w-2.5 h-2.5" />
+              <span>{matchedPlatform}</span>
+            </Badge>
+          )}
+
+          {isCodeMerged && (
+            <Badge variant="outline" className="gap-1 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-200/50">
+              <GitMerge className="w-2.5 h-2.5" />
+              <span>Merged</span>
+            </Badge>
+          )}
 
           {parsed.dueDate && (
             <Badge variant="outline" className="gap-1 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-200/50">

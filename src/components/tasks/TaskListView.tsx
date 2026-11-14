@@ -32,12 +32,15 @@ export const TaskListView: React.FC<TaskListViewProps> = ({ viewType }) => {
     bulkDeleteTasks,
     emptyTrash,
     categories,
+    platforms,
   } = useApp();
 
   const todayStr = format(new Date(), 'yyyy-MM-dd');
 
   // Filtering & Sorting State
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
+  const [selectedMergeStatus, setSelectedMergeStatus] = useState<'all' | 'merged' | 'unmerged'>('all');
   const [selectedPriority, setSelectedPriority] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'dueDate' | 'priority' | 'title' | 'createdAt'>('dueDate');
@@ -94,6 +97,20 @@ export const TaskListView: React.FC<TaskListViewProps> = ({ viewType }) => {
 
         // Category filter
         if (selectedCategory !== 'all' && task.category !== selectedCategory) {
+          return false;
+        }
+
+        // Platform / Field filter (e.g. Cognos, MicroStrategy, Tableau)
+        if (selectedPlatform !== 'all') {
+          if (selectedPlatform === 'None' && task.platform) return false;
+          if (selectedPlatform !== 'None' && task.platform !== selectedPlatform) return false;
+        }
+
+        // Code Merged status filter
+        if (selectedMergeStatus === 'merged' && !task.codeMerged) {
+          return false;
+        }
+        if (selectedMergeStatus === 'unmerged' && task.codeMerged) {
           return false;
         }
 
@@ -195,6 +212,32 @@ export const TaskListView: React.FC<TaskListViewProps> = ({ viewType }) => {
               ))}
             </select>
           </div>
+
+          {/* Field / Platform Filter */}
+          <select
+            value={selectedPlatform}
+            onChange={(e) => setSelectedPlatform(e.target.value)}
+            className="h-8 rounded-lg border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-800 focus:outline-none dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
+          >
+            <option value="all">All Fields / Tools</option>
+            {platforms.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+            <option value="None">None</option>
+          </select>
+
+          {/* Code Merged Filter */}
+          <select
+            value={selectedMergeStatus}
+            onChange={(e) => setSelectedMergeStatus(e.target.value as typeof selectedMergeStatus)}
+            className="h-8 rounded-lg border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-800 focus:outline-none dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
+          >
+            <option value="all">All Code Status</option>
+            <option value="merged">✓ Merged</option>
+            <option value="unmerged">Not Merged</option>
+          </select>
 
           {/* Priority Filter */}
           <select

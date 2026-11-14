@@ -20,6 +20,8 @@ import {
   CheckCircle2,
   AlertCircle,
   Sparkles,
+  Layers,
+  X,
 } from 'lucide-react';
 
 export const SettingsView: React.FC = () => {
@@ -30,6 +32,9 @@ export const SettingsView: React.FC = () => {
     habits,
     focusSessions,
     journal,
+    platforms,
+    addPlatform,
+    removePlatform,
     loadSampleData,
     resetAllData,
     showToast,
@@ -39,6 +44,13 @@ export const SettingsView: React.FC = () => {
   const [workDuration, setWorkDuration] = useState(settings.pomodoro.workDuration || 25);
   const [shortBreakDuration, setShortBreakDuration] = useState(settings.pomodoro.shortBreakDuration || 5);
   const [longBreakDuration, setLongBreakDuration] = useState(settings.pomodoro.longBreakDuration || 15);
+  const [newSettingPlatform, setNewSettingPlatform] = useState('');
+
+  const handleAddSettingPlatform = () => {
+    if (!newSettingPlatform.trim()) return;
+    addPlatform(newSettingPlatform.trim());
+    setNewSettingPlatform('');
+  };
 
   // Supabase states
   const [supabaseUrl, setSupabaseUrl] = useState(settings.supabaseSync?.url || '');
@@ -68,6 +80,7 @@ export const SettingsView: React.FC = () => {
       focusSessions,
       journal,
       settings,
+      platforms,
     });
     showToast('Exported complete JSON backup');
   };
@@ -86,6 +99,7 @@ export const SettingsView: React.FC = () => {
           if (json.habits) window.localStorage.setItem('zenith_habits_v1', JSON.stringify(json.habits));
           if (json.focusSessions) window.localStorage.setItem('zenith_focus_v1', JSON.stringify(json.focusSessions));
           if (json.journal) window.localStorage.setItem('zenith_journal_v1', JSON.stringify(json.journal));
+          if (json.platforms) window.localStorage.setItem('zenith_platforms_v1', JSON.stringify(json.platforms));
           if (json.settings) window.localStorage.setItem('zenith_settings_v1', JSON.stringify(json.settings));
           window.location.reload();
         } else {
@@ -223,7 +237,71 @@ export const SettingsView: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Pomodoro Durations */}
+      {/* 3. Work Fields & Tools (Cognos, MicroStrategy, Tableau, etc.) */}
+      <div className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900/90">
+        <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
+          <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+            <Layers className="w-4 h-4 text-indigo-500" />
+            <span>Work Fields & BI Tools</span>
+          </h3>
+          <span className="text-xs text-zinc-400 font-normal">Customizable directly from UI</span>
+        </div>
+
+        <div className="mt-4 space-y-3">
+          <p className="text-xs text-zinc-500">
+            These fields appear when adding tasks and filtering reports (e.g. Cognos, MicroStrategy, Tableau). Add any custom tool or remove unwanted ones without modifying code:
+          </p>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {platforms.map((p) => (
+              <span
+                key={p}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-semibold border border-blue-200/60 dark:border-blue-800/50"
+              >
+                <Layers className="w-3 h-3 text-blue-500" />
+                <span>{p}</span>
+                <button
+                  type="button"
+                  onClick={() => removePlatform(p)}
+                  title={`Remove ${p}`}
+                  className="hover:text-rose-500 ml-0.5 cursor-pointer"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            ))}
+            {platforms.length === 0 && (
+              <span className="text-xs text-zinc-400 italic">No fields configured. Add one below.</span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 pt-2 max-w-sm">
+            <Input
+              placeholder="e.g. Power BI, dbt, Snowflake..."
+              value={newSettingPlatform}
+              onChange={(e) => setNewSettingPlatform(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAddSettingPlatform();
+                }
+              }}
+              className="h-8 text-xs"
+            />
+            <Button
+              type="button"
+              size="sm"
+              onClick={handleAddSettingPlatform}
+              disabled={!newSettingPlatform.trim()}
+              className="text-xs shrink-0 h-8"
+            >
+              Add Field
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Pomodoro Durations */}
       <div className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900/90">
         <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2 pb-3 border-b border-zinc-100 dark:border-zinc-800">
           <Clock className="w-4 h-4 text-indigo-500" />

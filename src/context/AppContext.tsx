@@ -32,6 +32,7 @@ interface AppContextType {
   focusSessions: FocusSession[];
   journal: JournalEntry[];
   categories: Category[];
+  platforms: string[];
   settings: UserSettings;
   activityLogs: ActivityLog[];
   activeView: ActiveView;
@@ -56,12 +57,17 @@ interface AppContextType {
   showToast: (text: string, action?: { label: string; onClick: () => void }) => void;
   dismissToast: () => void;
 
+  // Platform & Field controls
+  addPlatform: (name: string) => void;
+  removePlatform: (name: string) => void;
+
   // Task actions
   addTask: (data: Partial<Task> & { title: string }) => Task;
   updateTask: (id: string, updates: Partial<Task>) => void;
   deleteTask: (id: string, permanent?: boolean) => void;
   restoreTask: (id: string) => void;
   toggleTaskComplete: (id: string) => void;
+  toggleCodeMerged: (taskId: string) => void;
   duplicateTask: (id: string) => void;
   reorderTasks: (tasks: Task[]) => void;
   bulkUpdateTasks: (ids: string[], updates: Partial<Task>) => void;
@@ -94,6 +100,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [focusSessions, setFocusSessions] = useState<FocusSession[]>([]);
   const [journal, setJournal] = useState<JournalEntry[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [platforms, setPlatforms] = useState<string[]>([]);
   const [settings, setSettings] = useState<UserSettings>(storage.getSettings());
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
 
@@ -130,6 +137,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const storedFocus = storage.getFocusSessions();
       const storedJournal = storage.getJournal();
       const storedCategories = storage.getCategories();
+      const storedPlatforms = storage.getPlatforms();
       const storedSettings = storage.getSettings();
       const storedActivity = storage.getActivityLogs();
 
@@ -138,6 +146,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setFocusSessions(storedFocus);
       setJournal(storedJournal);
       setCategories(storedCategories);
+      setPlatforms(storedPlatforms);
       setSettings(storedSettings);
       setActivityLogs(storedActivity);
       soundFx.setSoundEnabled(storedSettings.soundEffects);
@@ -231,6 +240,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         actualMinutes: data.actualMinutes || 0,
         dependencies: data.dependencies || [],
         color: data.color,
+        platform: data.platform || undefined,
+        codeMerged: data.codeMerged ?? false,
         archived: false,
         inTrash: false,
         order: tasks.length + 1,
@@ -414,6 +425,65 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       );
     },
     [tasks, logActivity, showToast]
+  );
+
+  const toggleCodeMerged = useCallback(
+    (taskId: string) => {
+      let nextStatus = false;
+      let taskTitle = '';
+
+      setTasks((prev) => {
+        const updated = prev.map((t) => {
+          if (t.id === taskId) {
+            nextStatus = !t.codeMerged;
+            taskTitle = t.title;
+            return {
+              ...t,
+              codeMerged: nextStatus,
+              updatedAt: new Date().toISOString(),
+            };
+          }
+          return t;
+        });
+        storage.saveTasks(updated);
+        return updated;
+      });
+
+      soundFx.playClick();
+      showToast(
+        nextStatus
+          ? `✓ Code marked as Merged: "${taskTitle.slice(0, 25)}"`
+          : `Code marked as Not Merged: "${taskTitle.slice(0, 25)}"`
+      );
+    },
+    [showToast]
+  );
+
+  const addPlatform = useCallback(
+    (name: string) => {
+      const trimmed = name.trim();
+      if (!trimmed) return;
+      setPlatforms((prev) => {
+        if (prev.some((p) => p.toLowerCase() === trimmed.toLowerCase())) return prev;
+        const updated = [...prev, trimmed];
+        storage.savePlatforms(updated);
+        return updated;
+      });
+      showToast(`Added field "${trimmed}"`);
+    },
+    [showToast]
+  );
+
+  const removePlatform = useCallback(
+    (name: string) => {
+      setPlatforms((prev) => {
+        const updated = prev.filter((p) => p !== name);
+        storage.savePlatforms(updated);
+        return updated;
+      });
+      showToast(`Removed field "${name}"`);
+    },
+    [showToast]
   );
 
   const duplicateTask = useCallback(
@@ -712,6 +782,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         focusSessions,
         journal,
         categories,
+        platforms,
         settings,
         activityLogs,
         activeView,
@@ -735,11 +806,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         showToast,
         dismissToast,
 
+        addPlatform,
+        removePlatform,
+
         addTask,
         updateTask,
         deleteTask,
         restoreTask,
         toggleTaskComplete,
+        toggleCodeMerged,
         duplicateTask,
         reorderTasks,
         bulkUpdateTasks,

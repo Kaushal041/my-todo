@@ -1,5 +1,5 @@
 import { Task, Habit, FocusSession, JournalEntry, UserSettings, ActivityLog, Category } from '@/types';
-import { sampleTasks, sampleHabits, sampleFocusSessions, sampleJournalEntries, defaultSettings, defaultCategories } from './sample-data';
+import { sampleTasks, sampleHabits, sampleFocusSessions, sampleJournalEntries, defaultSettings, defaultCategories, defaultPlatforms } from './sample-data';
 
 const STORAGE_KEYS = {
   TASKS: 'zenith_tasks_v1',
@@ -8,6 +8,7 @@ const STORAGE_KEYS = {
   JOURNAL: 'zenith_journal_v1',
   SETTINGS: 'zenith_settings_v1',
   CATEGORIES: 'zenith_categories_v1',
+  PLATFORMS: 'zenith_platforms_v1',
   ACTIVITY: 'zenith_activity_v1',
 };
 
@@ -63,6 +64,9 @@ export const storage = {
 
   getCategories: (): Category[] => safeGetItem<Category[]>(STORAGE_KEYS.CATEGORIES, defaultCategories),
   saveCategories: (categories: Category[]): void => safeSetItem(STORAGE_KEYS.CATEGORIES, categories),
+
+  getPlatforms: (): string[] => safeGetItem<string[]>(STORAGE_KEYS.PLATFORMS, defaultPlatforms),
+  savePlatforms: (platforms: string[]): void => safeSetItem(STORAGE_KEYS.PLATFORMS, platforms),
 
   getSettings: (): UserSettings => {
     const s = safeGetItem<UserSettings>(STORAGE_KEYS.SETTINGS, defaultSettings);

@@ -17,6 +17,9 @@ import {
   Tag,
   AlertCircle,
   AlertTriangle,
+  GitMerge,
+  GitPullRequest,
+  Layers,
 } from 'lucide-react';
 import { format, isPast, isToday } from 'date-fns';
 
@@ -39,6 +42,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
     duplicateTask,
     deleteTask,
     restoreTask,
+    toggleCodeMerged,
     setActiveView,
   } = useApp();
 
@@ -124,6 +128,14 @@ export const TaskItem: React.FC<TaskItemProps> = ({
               {task.title}
             </span>
 
+            {/* Field / Platform Badge (e.g. Cognos, MicroStrategy, Tableau) */}
+            {task.platform && (
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/50 dark:border-blue-800/40 shrink-0">
+                <Layers className="w-2.5 h-2.5 text-blue-500" />
+                <span>{task.platform}</span>
+              </span>
+            )}
+
             {task.recurring !== 'none' && (
               <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500 shrink-0">
                 ↻ {task.recurring}
@@ -198,7 +210,42 @@ export const TaskItem: React.FC<TaskItemProps> = ({
 
       {/* Right section: Priority Badge & Explicit Actions */}
       <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-zinc-100 dark:border-zinc-800">
-        {!task.inTrash && <Badge variant="priority" priority={task.priority} />}
+        {!task.inTrash && (
+          <div className="flex items-center gap-1.5">
+            {/* 1-Click Code Merged Toggle Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleCodeMerged(task.id);
+              }}
+              title={
+                task.codeMerged
+                  ? 'Code is merged (Click to toggle)'
+                  : 'Code is NOT merged (Click to mark as merged)'
+              }
+              className={`inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-full border transition-all cursor-pointer shrink-0 ${
+                task.codeMerged
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/50 hover:bg-emerald-100'
+                  : 'bg-zinc-100 text-zinc-600 border-zinc-200 dark:bg-zinc-800/80 dark:text-zinc-400 dark:border-zinc-700 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 dark:hover:bg-amber-950/30 dark:hover:text-amber-300'
+              }`}
+            >
+              {task.codeMerged ? (
+                <>
+                  <GitMerge className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                  <span>Merged</span>
+                </>
+              ) : (
+                <>
+                  <GitPullRequest className="w-3 h-3 text-amber-500" />
+                  <span>Not Merged</span>
+                </>
+              )}
+            </button>
+
+            <Badge variant="priority" priority={task.priority} />
+          </div>
+        )}
 
         {/* Action Buttons: Always accessible */}
         <div className="flex items-center gap-1">
