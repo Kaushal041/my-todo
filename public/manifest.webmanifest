@@ -1,0 +1,18 @@
+{
+  "name": "Zenith - Personal Productivity OS",
+  "short_name": "Zenith",
+  "description": "Premium personal productivity dashboard, tasks, Pomodoro timer, habits, and analytics.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
