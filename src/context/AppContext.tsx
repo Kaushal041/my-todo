@@ -110,6 +110,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Initialize from storage on mount
   useEffect(() => {
     try {
+      // Automatic migration to Kaushal's clean workspace
+      if (typeof window !== 'undefined') {
+        const hasKaushalInit = window.localStorage.getItem('zenith_kaushal_clean_v1');
+        if (!hasKaushalInit) {
+          window.localStorage.setItem('zenith_kaushal_clean_v1', 'true');
+          window.localStorage.removeItem('zenith_tasks_v1');
+          window.localStorage.removeItem('zenith_habits_v1');
+          window.localStorage.removeItem('zenith_focus_v1');
+          window.localStorage.removeItem('zenith_journal_v1');
+          const currentSettings = storage.getSettings();
+          currentSettings.userName = 'Kaushal';
+          storage.saveSettings(currentSettings);
+        }
+      }
+
       const storedTasks = storage.getTasks();
       const storedHabits = storage.getHabits();
       const storedFocus = storage.getFocusSessions();
@@ -145,15 +160,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Theme helper
+  // Theme helper: manages .dark and .light classes, data-theme attribute, and colorScheme
   const applyTheme = (theme: 'dark' | 'light' | 'system') => {
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
-    if (theme === 'system') {
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      root.classList.toggle('dark', isDark);
+    const isDark =
+      theme === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+        : theme === 'dark';
+
+    if (isDark) {
+      root.classList.add('dark');
+      root.classList.remove('light');
+      root.setAttribute('data-theme', 'dark');
+      root.style.colorScheme = 'dark';
     } else {
-      root.classList.toggle('dark', theme === 'dark');
+      root.classList.remove('dark');
+      root.classList.add('light');
+      root.setAttribute('data-theme', 'light');
+      root.style.colorScheme = 'light';
     }
   };
 

@@ -35,7 +35,7 @@ export const SettingsView: React.FC = () => {
     showToast,
   } = useApp();
 
-  const [userName, setUserName] = useState(settings.userName || 'Alex');
+  const [userName, setUserName] = useState(settings.userName || 'Kaushal');
   const [workDuration, setWorkDuration] = useState(settings.pomodoro.workDuration || 25);
   const [shortBreakDuration, setShortBreakDuration] = useState(settings.pomodoro.shortBreakDuration || 5);
   const [longBreakDuration, setLongBreakDuration] = useState(settings.pomodoro.longBreakDuration || 15);
@@ -51,7 +51,7 @@ export const SettingsView: React.FC = () => {
 
   const handleSaveProfile = () => {
     updateSettings({
-      userName: userName.trim() || 'Alex',
+      userName: userName.trim() || 'Kaushal',
       pomodoro: {
         ...settings.pomodoro,
         workDuration: Number(workDuration) || 25,

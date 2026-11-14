@@ -17,7 +17,7 @@ export const defaultCategories: Category[] = [
 ];
 
 export const defaultSettings: UserSettings = {
-  userName: 'Alex',
+  userName: 'Kaushal',
   theme: 'dark',
   accentColor: 'indigo',
   defaultPriority: 'medium',

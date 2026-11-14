@@ -97,7 +97,7 @@ export const DashboardView: React.FC = () => {
             <span>{format(now, 'EEEE, MMMM d, yyyy')}</span>
           </div>
           <h2 className="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-            {greeting}, {settings.userName || 'Alex'}
+            {greeting}, {settings.userName || 'Kaushal'}
           </h2>
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
             You have <span className="font-semibold text-zinc-800 dark:text-zinc-200">{dueTodayPending} tasks</span> due today and{' '}

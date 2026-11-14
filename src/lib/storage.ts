@@ -34,7 +34,7 @@ function safeSetItem<T>(key: string, value: T): void {
 
 export const storage = {
   getTasks: (): Task[] => {
-    const raw = safeGetItem<Task[]>(STORAGE_KEYS.TASKS, sampleTasks);
+    const raw = safeGetItem<Task[]>(STORAGE_KEYS.TASKS, []);
     const TEN_DAYS_MS = 10 * 24 * 60 * 60 * 1000;
     const now = Date.now();
     // Filter out tasks older than 10 days in the Recycle Bin
@@ -52,19 +52,26 @@ export const storage = {
   },
   saveTasks: (tasks: Task[]): void => safeSetItem(STORAGE_KEYS.TASKS, tasks),
 
-  getHabits: (): Habit[] => safeGetItem<Habit[]>(STORAGE_KEYS.HABITS, sampleHabits),
+  getHabits: (): Habit[] => safeGetItem<Habit[]>(STORAGE_KEYS.HABITS, []),
   saveHabits: (habits: Habit[]): void => safeSetItem(STORAGE_KEYS.HABITS, habits),
 
-  getFocusSessions: (): FocusSession[] => safeGetItem<FocusSession[]>(STORAGE_KEYS.FOCUS_SESSIONS, sampleFocusSessions),
+  getFocusSessions: (): FocusSession[] => safeGetItem<FocusSession[]>(STORAGE_KEYS.FOCUS_SESSIONS, []),
   saveFocusSessions: (sessions: FocusSession[]): void => safeSetItem(STORAGE_KEYS.FOCUS_SESSIONS, sessions),
 
-  getJournal: (): JournalEntry[] => safeGetItem<JournalEntry[]>(STORAGE_KEYS.JOURNAL, sampleJournalEntries),
+  getJournal: (): JournalEntry[] => safeGetItem<JournalEntry[]>(STORAGE_KEYS.JOURNAL, []),
   saveJournal: (journal: JournalEntry[]): void => safeSetItem(STORAGE_KEYS.JOURNAL, journal),
 
   getCategories: (): Category[] => safeGetItem<Category[]>(STORAGE_KEYS.CATEGORIES, defaultCategories),
   saveCategories: (categories: Category[]): void => safeSetItem(STORAGE_KEYS.CATEGORIES, categories),
 
-  getSettings: (): UserSettings => safeGetItem<UserSettings>(STORAGE_KEYS.SETTINGS, defaultSettings),
+  getSettings: (): UserSettings => {
+    const s = safeGetItem<UserSettings>(STORAGE_KEYS.SETTINGS, defaultSettings);
+    if (!s.userName || s.userName === 'Alex') {
+      s.userName = 'Kaushal';
+      safeSetItem(STORAGE_KEYS.SETTINGS, s);
+    }
+    return s;
+  },
   saveSettings: (settings: UserSettings): void => safeSetItem(STORAGE_KEYS.SETTINGS, settings),
 
   getActivityLogs: (): ActivityLog[] => safeGetItem<ActivityLog[]>(STORAGE_KEYS.ACTIVITY, []),
