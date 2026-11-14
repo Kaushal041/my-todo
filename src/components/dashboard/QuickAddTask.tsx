@@ -38,7 +38,7 @@ export const QuickAddTask: React.FC = () => {
         </div>
         <input
           type="text"
-          placeholder="Quick add task... (e.g. 'Draft proposal tomorrow at 3pm !urgent #work @review')"
+          placeholder="Quick add task... (e.g. 'Submit report tomorrow at 3pm !urgent #work')"
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
           className="flex-1 bg-transparent text-sm placeholder:text-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder:text-zinc-500"

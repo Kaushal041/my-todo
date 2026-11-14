@@ -143,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         <button
           onClick={toggleSound}
           title={settings.soundEffects ? 'Sound Enabled' : 'Sound Muted'}
-          className="rounded-xl border border-zinc-200 p-2 text-zinc-500 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-850 dark:hover:text-zinc-200 transition-colors"
+          className="rounded-xl border border-zinc-200 p-2 text-zinc-500 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition-colors"
         >
           {settings.soundEffects ? <Volume2 className="w-4 h-4 text-indigo-500" /> : <VolumeX className="w-4 h-4 text-zinc-400" />}
         </button>
@@ -152,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         <button
           onClick={toggleTheme}
           title={settings.theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          className="rounded-xl border border-zinc-200 p-2 text-zinc-500 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-850 dark:hover:text-zinc-200 transition-colors"
+          className="rounded-xl border border-zinc-200 p-2 text-zinc-500 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition-colors"
         >
           {settings.theme === 'dark' ? (
             <Sun className="w-4 h-4 text-amber-400 transition-transform hover:rotate-45" />

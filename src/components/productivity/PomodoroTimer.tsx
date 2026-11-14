@@ -115,13 +115,13 @@ export const PomodoroTimer: React.FC = () => {
       {/* Timer Container Card */}
       <div className="max-w-2xl mx-auto rounded-3xl border border-zinc-200/80 bg-white p-6 sm:p-10 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900/90 text-center flex flex-col items-center">
         {/* Mode Selector Tabs */}
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-8">
+        <div className="flex flex-wrap sm:flex-nowrap justify-center items-center gap-1.5 p-1 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-6 sm:mb-8">
           <button
             onClick={() => {
               setMode('work');
               setIsActive(false);
             }}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
               mode === 'work'
                 ? 'bg-white text-indigo-600 shadow-xs dark:bg-zinc-900 dark:text-indigo-400'
                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -136,7 +136,7 @@ export const PomodoroTimer: React.FC = () => {
               setMode('short_break');
               setIsActive(false);
             }}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
               mode === 'short_break'
                 ? 'bg-white text-emerald-600 shadow-xs dark:bg-zinc-900 dark:text-emerald-400'
                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -151,7 +151,7 @@ export const PomodoroTimer: React.FC = () => {
               setMode('long_break');
               setIsActive(false);
             }}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
               mode === 'long_break'
                 ? 'bg-white text-sky-600 shadow-xs dark:bg-zinc-900 dark:text-sky-400'
                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -163,7 +163,7 @@ export const PomodoroTimer: React.FC = () => {
         </div>
 
         {/* Circular Progress Display */}
-        <div className="relative w-64 h-64 flex items-center justify-center my-2">
+        <div className="relative w-52 h-52 sm:w-64 sm:h-64 flex items-center justify-center my-2">
           <svg className="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
             {/* Background track circle */}
             <circle
@@ -198,7 +198,7 @@ export const PomodoroTimer: React.FC = () => {
 
           {/* Time digits */}
           <div className="absolute flex flex-col items-center">
-            <span className="text-5xl sm:text-6xl font-black tracking-tight text-zinc-900 dark:text-white font-mono">
+            <span className="text-4xl sm:text-6xl font-black tracking-tight text-zinc-900 dark:text-white font-mono">
               {formattedTime}
             </span>
             <span className="text-xs uppercase font-bold tracking-widest text-zinc-400 mt-1">

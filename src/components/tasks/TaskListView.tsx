@@ -14,6 +14,7 @@ import {
   AlertCircle,
   Inbox,
   Search,
+  Clock,
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -162,6 +163,19 @@ export const TaskListView: React.FC<TaskListViewProps> = ({ viewType }) => {
 
   return (
     <div className="space-y-4 pb-12 animate-in fade-in duration-200">
+      {/* Recycle Bin 10-Day Policy Alert Banner */}
+      {viewType === 'trash' && (
+        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-300">
+          <Clock className="w-4 h-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+          <div className="space-y-0.5">
+            <span className="font-bold block">Recycle Bin • 10-Day Retention Policy</span>
+            <span className="text-zinc-600 dark:text-zinc-400">
+              Tasks moved to the Recycle Bin are safely stored for 10 days before automatic permanent deletion. You can restore any task to your active workspace or delete it immediately.
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Top Filter & Action Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl border border-zinc-200/80 bg-white dark:border-zinc-800/80 dark:bg-zinc-900/90 shadow-2xs">
         <div className="flex flex-wrap items-center gap-2">
@@ -230,12 +244,16 @@ export const TaskListView: React.FC<TaskListViewProps> = ({ viewType }) => {
             <Button
               variant="danger"
               size="sm"
-              onClick={emptyTrash}
+              onClick={() => {
+                if (window.confirm('Permanently purge all items in the Recycle Bin?')) {
+                  emptyTrash();
+                }
+              }}
               disabled={displayedTasks.length === 0}
               className="text-xs gap-1.5 h-8"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>Empty Trash</span>
+              <span>Empty Recycle Bin</span>
             </Button>
           ) : (
             <Button

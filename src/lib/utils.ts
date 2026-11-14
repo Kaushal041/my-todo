@@ -17,3 +17,28 @@ export function formatMinutes(mins: number): string {
   const remainingMins = mins % 60;
   return remainingMins > 0 ? `${hours}h ${remainingMins}m` : `${hours}h`;
 }
+
+/**
+ * Calculate remaining days for an item in the Recycle Bin (10-day retention policy)
+ */
+export function getRemainingTrashDays(trashedAt?: string): { daysLeft: number; isExpired: boolean; formattedDate: string } {
+  if (!trashedAt) {
+    return { daysLeft: 10, isExpired: false, formattedDate: 'Recently' };
+  }
+  const trashedDate = new Date(trashedAt);
+  const elapsedMs = Date.now() - trashedDate.getTime();
+  const TEN_DAYS_MS = 10 * 24 * 60 * 60 * 1000;
+  const remainingMs = TEN_DAYS_MS - elapsedMs;
+  const daysLeft = Math.max(0, Math.ceil(remainingMs / (24 * 60 * 60 * 1000)));
+
+  const formattedDate = trashedDate.toLocaleDateString([], {
+    month: 'short',
+    day: 'numeric',
+  });
+
+  return {
+    daysLeft,
+    isExpired: remainingMs <= 0,
+    formattedDate,
+  };
+}

@@ -59,7 +59,7 @@ export const Dialog: React.FC<DialogProps> = ({
       {/* Modal Dialog Card */}
       <div
         className={cn(
-          'relative w-full rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl transition-all duration-200 animate-in zoom-in-95 dark:border-zinc-800 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 z-10 max-h-[90vh] flex flex-col',
+          'relative w-full rounded-2xl border border-zinc-200 bg-white p-4 sm:p-6 shadow-2xl transition-all duration-200 animate-in zoom-in-95 dark:border-zinc-800 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 z-10 max-h-[92vh] flex flex-col',
           widthClasses[maxWidth]
         )}
       >

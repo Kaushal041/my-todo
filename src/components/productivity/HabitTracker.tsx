@@ -98,95 +98,99 @@ export const HabitTracker: React.FC = () => {
       </div>
 
       {/* Habits 7-Day Grid Cards */}
-      <div className="rounded-2xl border border-zinc-200/80 bg-white dark:border-zinc-800/80 dark:bg-zinc-900/90 shadow-2xs overflow-hidden">
-        {/* Table / Grid Header */}
-        <div className="grid grid-cols-12 items-center p-3.5 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-850/50 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
-          <div className="col-span-5 sm:col-span-4">Habit & Category</div>
-          <div className="col-span-5 sm:col-span-6 grid grid-cols-7 text-center">
-            {weekDays.map((d) => (
-              <div key={d.toISOString()} className="flex flex-col items-center">
-                <span>{format(d, 'EEE')[0]}</span>
-                <span className="text-[10px] font-mono text-zinc-500">{format(d, 'd')}</span>
-              </div>
-            ))}
-          </div>
-          <div className="col-span-2 text-right">Streak</div>
-        </div>
-
-        {/* Habit Rows */}
-        <div className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
-          {habits.map((habit) => {
-            const thisWeekDoneCount = weekDays.filter((d) =>
-              habit.completedDates.includes(format(d, 'yyyy-MM-dd'))
-            ).length;
-
-            return (
-              <div
-                key={habit.id}
-                className="grid grid-cols-12 items-center p-3.5 hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 transition-colors"
-              >
-                {/* Left: Title, category, delete */}
-                <div className="col-span-5 sm:col-span-4 flex items-center gap-2.5 min-w-0 pr-2">
-                  <div
-                    className="w-2.5 h-2.5 rounded-full shrink-0"
-                    style={{ backgroundColor: habit.color || '#6366f1' }}
-                  />
-                  <div className="min-w-0">
-                    <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
-                      {habit.title}
-                    </h4>
-                    <span className="text-[10px] text-zinc-400">
-                      {thisWeekDoneCount}/{habit.targetDaysPerWeek}d this week • {habit.category}
-                    </span>
+      <div className="rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 shadow-xs overflow-hidden">
+        <div className="overflow-x-auto">
+          <div className="min-w-[540px]">
+            {/* Table / Grid Header */}
+            <div className="grid grid-cols-12 items-center p-3.5 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/60 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+              <div className="col-span-5 sm:col-span-4">Habit & Category</div>
+              <div className="col-span-5 sm:col-span-6 grid grid-cols-7 text-center">
+                {weekDays.map((d) => (
+                  <div key={d.toISOString()} className="flex flex-col items-center">
+                    <span>{format(d, 'EEE')[0]}</span>
+                    <span className="text-[10px] font-mono text-zinc-500">{format(d, 'd')}</span>
                   </div>
-
-                  <button
-                    onClick={() => deleteHabit(habit.id)}
-                    className="opacity-0 group-hover:opacity-100 p-1 text-zinc-300 hover:text-rose-500 transition-opacity ml-auto"
-                    title="Delete habit"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                {/* Middle: 7 Day Toggle Checkboxes */}
-                <div className="col-span-5 sm:col-span-6 grid grid-cols-7 gap-1">
-                  {weekDays.map((d) => {
-                    const dateStr = format(d, 'yyyy-MM-dd');
-                    const isDone = habit.completedDates.includes(dateStr);
-                    return (
-                      <button
-                        key={dateStr}
-                        onClick={() => toggleHabitDate(habit.id, dateStr)}
-                        className={`h-7 w-7 mx-auto rounded-lg flex items-center justify-center transition-all ${
-                          isDone
-                            ? 'text-white shadow-xs'
-                            : 'border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 bg-white dark:bg-zinc-900'
-                        }`}
-                        style={{
-                          backgroundColor: isDone ? habit.color || '#6366f1' : undefined,
-                        }}
-                      >
-                        {isDone && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Right: Streak badge */}
-                <div className="col-span-2 flex items-center justify-end gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400">
-                  <Flame className="w-3.5 h-3.5 fill-amber-500" />
-                  <span>{habit.streak}d</span>
-                </div>
+                ))}
               </div>
-            );
-          })}
-
-          {habits.length === 0 && (
-            <div className="py-12 text-center text-xs text-zinc-400">
-              No habits created yet. Click &apos;Add New Habit&apos; to build daily rituals!
+              <div className="col-span-2 text-right">Streak</div>
             </div>
-          )}
+
+            {/* Habit Rows */}
+            <div className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+              {habits.map((habit) => {
+                const thisWeekDoneCount = weekDays.filter((d) =>
+                  habit.completedDates.includes(format(d, 'yyyy-MM-dd'))
+                ).length;
+
+                return (
+                  <div
+                    key={habit.id}
+                    className="grid grid-cols-12 items-center p-3.5 hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 transition-colors"
+                  >
+                    {/* Left: Title, category, delete */}
+                    <div className="col-span-5 sm:col-span-4 flex items-center gap-2.5 min-w-0 pr-2">
+                      <div
+                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        style={{ backgroundColor: habit.color || '#6366f1' }}
+                      />
+                      <div className="min-w-0">
+                        <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                          {habit.title}
+                        </h4>
+                        <span className="text-[10px] text-zinc-400">
+                          {thisWeekDoneCount}/{habit.targetDaysPerWeek}d this week • {habit.category}
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={() => deleteHabit(habit.id)}
+                        className="p-1 text-zinc-300 hover:text-rose-500 transition-colors ml-auto shrink-0"
+                        title="Delete habit"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Middle: 7 Day Toggle Checkboxes */}
+                    <div className="col-span-5 sm:col-span-6 grid grid-cols-7 gap-1">
+                      {weekDays.map((d) => {
+                        const dateStr = format(d, 'yyyy-MM-dd');
+                        const isDone = habit.completedDates.includes(dateStr);
+                        return (
+                          <button
+                            key={dateStr}
+                            onClick={() => toggleHabitDate(habit.id, dateStr)}
+                            className={`h-7 w-7 mx-auto rounded-lg flex items-center justify-center transition-all ${
+                              isDone
+                                ? 'text-white shadow-xs'
+                                : 'border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 bg-white dark:bg-zinc-900'
+                            }`}
+                            style={{
+                              backgroundColor: isDone ? habit.color || '#6366f1' : undefined,
+                            }}
+                          >
+                            {isDone && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Right: Streak badge */}
+                    <div className="col-span-2 flex items-center justify-end gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400">
+                      <Flame className="w-3.5 h-3.5 fill-amber-500" />
+                      <span>{habit.streak}d</span>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {habits.length === 0 && (
+                <div className="py-12 text-center text-xs text-zinc-400">
+                  No habits created yet. Click &apos;Add New Habit&apos; to build daily rituals!
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 

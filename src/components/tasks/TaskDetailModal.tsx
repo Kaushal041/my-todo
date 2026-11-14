@@ -490,9 +490,10 @@ export const TaskDetailModal: React.FC = () => {
                     closeTaskModal();
                   }}
                   className="gap-1.5 text-xs text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                  title="Move to Recycle Bin (10-day retention)"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
-                  <span>Delete</span>
+                  <span>Delete (Recycle Bin)</span>
                 </Button>
               </>
             )}

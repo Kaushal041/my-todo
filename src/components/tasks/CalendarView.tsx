@@ -122,9 +122,11 @@ export const CalendarView: React.FC = () => {
 
       {calendarMode === 'month' ? (
         /* Monthly Grid */
-        <div className="rounded-2xl border border-zinc-200/80 bg-white dark:border-zinc-800/80 dark:bg-zinc-900/90 shadow-2xs overflow-hidden">
+        <div className="rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 shadow-xs overflow-hidden">
+          <div className="overflow-x-auto">
+            <div className="min-w-[600px]">
           {/* Weekday headers */}
-          <div className="grid grid-cols-7 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-850/50 text-center py-2.5 text-xs font-bold uppercase tracking-wider text-zinc-400">
+          <div className="grid grid-cols-7 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/60 text-center py-2.5 text-xs font-bold uppercase tracking-wider text-zinc-400">
             <div>Mon</div>
             <div>Tue</div>
             <div>Wed</div>
@@ -215,6 +217,8 @@ export const CalendarView: React.FC = () => {
               );
             })}
           </div>
+            </div>
+          </div>
         </div>
       ) : (
         /* Week View Grid */
@@ -260,7 +264,7 @@ export const CalendarView: React.FC = () => {
                     <div
                       key={task.id}
                       onClick={() => openEditTaskModal(task)}
-                      className="p-2 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-850/60 hover:border-zinc-300 dark:hover:border-zinc-700 cursor-pointer transition-all"
+                      className="p-2 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 hover:border-zinc-300 dark:hover:border-zinc-700 cursor-pointer transition-all"
                     >
                       <div className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate">
                         {task.title}

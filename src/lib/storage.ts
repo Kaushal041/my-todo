@@ -33,7 +33,23 @@ function safeSetItem<T>(key: string, value: T): void {
 }
 
 export const storage = {
-  getTasks: (): Task[] => safeGetItem<Task[]>(STORAGE_KEYS.TASKS, sampleTasks),
+  getTasks: (): Task[] => {
+    const raw = safeGetItem<Task[]>(STORAGE_KEYS.TASKS, sampleTasks);
+    const TEN_DAYS_MS = 10 * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    // Filter out tasks older than 10 days in the Recycle Bin
+    const valid = raw.filter((t) => {
+      if (t.inTrash && t.trashedAt) {
+        const elapsed = now - new Date(t.trashedAt).getTime();
+        return elapsed <= TEN_DAYS_MS;
+      }
+      return true;
+    });
+    if (valid.length !== raw.length) {
+      safeSetItem(STORAGE_KEYS.TASKS, valid);
+    }
+    return valid;
+  },
   saveTasks: (tasks: Task[]): void => safeSetItem(STORAGE_KEYS.TASKS, tasks),
 
   getHabits: (): Habit[] => safeGetItem<Habit[]>(STORAGE_KEYS.HABITS, sampleHabits),

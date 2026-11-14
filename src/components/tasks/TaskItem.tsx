@@ -4,6 +4,7 @@ import React from 'react';
 import { Task } from '@/types';
 import { useApp } from '@/context/AppContext';
 import { Badge } from '@/components/ui/Badge';
+import { getRemainingTrashDays } from '@/lib/utils';
 import {
   Check,
   Calendar,
@@ -15,7 +16,7 @@ import {
   RotateCcw,
   Tag,
   AlertCircle,
-  MoreVertical,
+  AlertTriangle,
 } from 'lucide-react';
 import { format, isPast, isToday } from 'date-fns';
 
@@ -60,27 +61,30 @@ export const TaskItem: React.FC<TaskItemProps> = ({
     }
   }
 
+  // Recycle bin 10-day retention calculation
+  const trashInfo = task.inTrash ? getRemainingTrashDays(task.trashedAt) : null;
+
   return (
     <div
-      className={`group relative flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl border transition-all select-none ${
+      className={`group relative flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 p-3 rounded-xl border transition-all select-none ${
         isCompleted
-          ? 'bg-zinc-50/50 border-zinc-200/50 dark:bg-zinc-900/30 dark:border-zinc-800/40 opacity-75'
+          ? 'bg-zinc-50/60 border-zinc-200/60 dark:bg-zinc-900/40 dark:border-zinc-800/50 opacity-80'
           : task.inTrash
-          ? 'bg-zinc-50 border-zinc-200 dark:bg-zinc-900/40 dark:border-zinc-800'
+          ? 'bg-rose-50/20 border-rose-200/60 dark:bg-rose-950/10 dark:border-rose-900/40'
           : isSelected
-          ? 'bg-indigo-50/40 border-indigo-300 dark:bg-indigo-950/20 dark:border-indigo-800'
-          : 'bg-white border-zinc-200/80 hover:border-zinc-300 dark:bg-zinc-900/90 dark:border-zinc-800/80 dark:hover:border-zinc-700 shadow-2xs hover:shadow-xs'
+          ? 'bg-indigo-50/50 border-indigo-300 dark:bg-indigo-950/30 dark:border-indigo-800'
+          : 'bg-white border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs'
       }`}
     >
       {/* Left section: Checkbox, Selection, Title & Badges */}
-      <div className="flex items-center gap-3 min-w-0 flex-1">
+      <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
         {/* Bulk select checkbox */}
         {onToggleSelect && (
           <input
             type="checkbox"
             checked={isSelected}
             onChange={() => onToggleSelect(task.id)}
-            className="w-3.5 h-3.5 rounded text-indigo-600 focus:ring-indigo-500/30 border-zinc-300 dark:border-zinc-700 cursor-pointer hidden group-hover:block"
+            className="w-4 h-4 mt-0.5 sm:mt-0 rounded text-indigo-600 focus:ring-indigo-500/30 border-zinc-300 dark:border-zinc-700 cursor-pointer shrink-0"
             title="Select for bulk action"
           />
         )}
@@ -89,7 +93,8 @@ export const TaskItem: React.FC<TaskItemProps> = ({
         {!task.inTrash ? (
           <button
             onClick={() => toggleTaskComplete(task.id)}
-            className={`w-5 h-5 rounded-md flex items-center justify-center transition-all shrink-0 cursor-pointer ${
+            title={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
+            className={`w-5 h-5 mt-0.5 sm:mt-0 rounded-md flex items-center justify-center transition-all shrink-0 cursor-pointer ${
               isCompleted
                 ? 'bg-emerald-600 text-white shadow-xs'
                 : 'border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 hover:bg-indigo-50/50 dark:hover:border-indigo-500'
@@ -98,7 +103,9 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             {isCompleted && <Check className="w-3.5 h-3.5 stroke-[2.5]" />}
           </button>
         ) : (
-          <Trash2 className="w-4 h-4 text-zinc-400 shrink-0" />
+          <div className="w-5 h-5 rounded-md flex items-center justify-center bg-rose-500/10 text-rose-500 shrink-0">
+            <Trash2 className="w-3.5 h-3.5" />
+          </div>
         )}
 
         {/* Title & metadata */}
@@ -106,9 +113,9 @@ export const TaskItem: React.FC<TaskItemProps> = ({
           onClick={() => !task.inTrash && openEditTaskModal(task)}
           className="flex-1 min-w-0 cursor-pointer"
         >
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`text-sm font-medium tracking-tight truncate ${
+              className={`text-sm font-medium tracking-tight break-words ${
                 isCompleted
                   ? 'line-through text-zinc-400 dark:text-zinc-500'
                   : 'text-zinc-900 dark:text-zinc-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors'
@@ -118,16 +125,24 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             </span>
 
             {task.recurring !== 'none' && (
-              <span className="text-[10px] font-mono px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500 shrink-0">
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500 shrink-0">
                 ↻ {task.recurring}
+              </span>
+            )}
+
+            {/* Trash retention badge when in Recycle Bin */}
+            {task.inTrash && trashInfo && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                <Clock className="w-2.5 h-2.5" />
+                <span>{trashInfo.daysLeft} days left in Recycle Bin</span>
               </span>
             )}
           </div>
 
           {/* Subtitle row with dates, subtasks, tags */}
-          <div className="flex flex-wrap items-center gap-2.5 mt-1 text-xs text-zinc-400 dark:text-zinc-500">
+          <div className="flex flex-wrap items-center gap-2.5 mt-1 text-xs text-zinc-500 dark:text-zinc-400">
             {/* Due date */}
-            {task.dueDate && (
+            {task.dueDate && !task.inTrash && (
               <span
                 className={`flex items-center gap-1 text-[11px] font-medium ${
                   isOverdue
@@ -144,7 +159,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             )}
 
             {/* Subtasks counter */}
-            {subtasksCount > 0 && (
+            {subtasksCount > 0 && !task.inTrash && (
               <span className="flex items-center gap-1 text-[11px]">
                 <ListTodo className="w-3 h-3" />
                 <span>
@@ -154,7 +169,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             )}
 
             {/* Estimated vs Actual minutes */}
-            {(task.estimatedMinutes || task.actualMinutes) && (
+            {(task.estimatedMinutes || task.actualMinutes) && !task.inTrash && (
               <span className="flex items-center gap-1 text-[11px] font-mono">
                 <Clock className="w-3 h-3" />
                 <span>
@@ -165,13 +180,13 @@ export const TaskItem: React.FC<TaskItemProps> = ({
 
             {/* Category */}
             {showCategory && task.category && (
-              <span className="text-[11px] px-1.5 py-0.2 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+              <span className="text-[11px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
                 #{task.category}
               </span>
             )}
 
             {/* Tags */}
-            {task.tags.slice(0, 2).map((tg) => (
+            {task.tags.slice(0, 3).map((tg) => (
               <span key={tg} className="text-[11px] text-zinc-400 flex items-center gap-0.5">
                 <Tag className="w-2.5 h-2.5" />
                 {tg}
@@ -181,21 +196,21 @@ export const TaskItem: React.FC<TaskItemProps> = ({
         </div>
       </div>
 
-      {/* Right section: Priority Badge & Hover Actions */}
-      <div className="flex items-center gap-2 shrink-0">
+      {/* Right section: Priority Badge & Explicit Actions */}
+      <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-zinc-100 dark:border-zinc-800">
         {!task.inTrash && <Badge variant="priority" priority={task.priority} />}
 
-        {/* Hover Quick Actions */}
-        <div className="hidden group-hover:flex items-center gap-1 pl-1 transition-opacity">
+        {/* Action Buttons: Always accessible */}
+        <div className="flex items-center gap-1">
           {!task.inTrash ? (
             <>
-              {/* Start Pomodoro with this task */}
+              {/* Pomodoro trigger */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setActiveView('pomodoro');
                 }}
-                title="Start Pomodoro on this task"
+                title="Focus on this task with Pomodoro"
                 className="p-1.5 rounded-lg text-zinc-400 hover:text-indigo-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
               >
                 <Timer className="w-3.5 h-3.5" />
@@ -213,43 +228,47 @@ export const TaskItem: React.FC<TaskItemProps> = ({
                 <Copy className="w-3.5 h-3.5" />
               </button>
 
-              {/* Delete to trash */}
+              {/* ALWAYS VISIBLE DELETE BUTTON */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   deleteTask(task.id, false);
                 }}
-                title="Move to trash"
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                title="Move to Recycle Bin (10-day retention)"
+                className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-zinc-500 hover:text-rose-600 bg-zinc-100/70 hover:bg-rose-50 dark:bg-zinc-800/60 dark:hover:bg-rose-950/40 dark:text-zinc-400 dark:hover:text-rose-400 border border-zinc-200/50 dark:border-zinc-700/50 hover:border-rose-300 dark:hover:border-rose-900 transition-all cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
+                <span className="text-[11px]">Delete</span>
               </button>
             </>
           ) : (
             <>
-              {/* Restore from trash */}
+              {/* Restore from Recycle Bin */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   restoreTask(task.id);
                 }}
-                title="Restore task"
-                className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 font-medium transition-colors"
+                title="Restore task to active list"
+                className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-900/50 border border-emerald-200/60 dark:border-emerald-800/60 font-medium transition-colors"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Restore</span>
               </button>
 
-              {/* Permanent delete */}
+              {/* Delete permanently right now */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  deleteTask(task.id, true);
+                  if (window.confirm(`Permanently delete "${task.title}" now? This cannot be undone.`)) {
+                    deleteTask(task.id, true);
+                  }
                 }}
-                title="Permanently delete"
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                title="Delete permanently right now"
+                className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-300 dark:hover:bg-rose-900/50 border border-rose-200/60 dark:border-rose-800/60 font-medium transition-colors"
               >
-                <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                <Trash2 className="w-3 h-3" />
+                <span>Delete Now</span>
               </button>
             </>
           )}

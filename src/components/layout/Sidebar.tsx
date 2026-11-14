@@ -24,6 +24,7 @@ import {
   Sparkles,
   HelpCircle,
   Plus,
+  X,
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -105,14 +106,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs md:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden animate-in fade-in"
           onClick={onCloseMobile}
         />
       )}
 
       <aside
         className={cn(
-          'fixed md:static inset-y-0 left-0 z-40 w-64 shrink-0 flex flex-col justify-between border-r border-zinc-200/80 bg-zinc-50/90 p-4 transition-transform duration-200 ease-in-out dark:border-zinc-800/80 dark:bg-zinc-950/95 backdrop-blur-md',
+          'fixed md:static inset-y-0 left-0 z-40 w-64 shrink-0 flex flex-col justify-between border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 p-4 transition-transform duration-200 ease-in-out shadow-xl md:shadow-none',
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         )}
       >
@@ -134,13 +135,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
               </div>
             </div>
 
-            <button
-              onClick={() => setIsAiModalOpen(true)}
-              title="AI Assistant & Planner"
-              className="p-1.5 rounded-lg border border-indigo-200/60 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:border-indigo-900/60 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/50 dark:text-indigo-400 transition-colors"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setIsAiModalOpen(true)}
+                title="AI Assistant & Planner"
+                className="p-1.5 rounded-lg border border-indigo-200/60 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:border-indigo-900/60 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/50 dark:text-indigo-400 transition-colors"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+              </button>
+
+              {/* Mobile close button */}
+              <button
+                onClick={onCloseMobile}
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 md:hidden"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           {/* Quick Add Task Button */}

@@ -11,6 +11,7 @@ import {
   Check,
   Clock,
   Sparkles,
+  Trash2,
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -18,6 +19,7 @@ export const KanbanBoard: React.FC = () => {
   const {
     tasks,
     updateTask,
+    deleteTask,
     openCreateTaskModal,
     openEditTaskModal,
     toggleTaskComplete,
@@ -30,17 +32,17 @@ export const KanbanBoard: React.FC = () => {
 
   // Status Columns
   const statusColumns: { id: TaskStatus; title: string; color: string }[] = [
-    { id: 'not_started', title: 'To Do', color: 'border-zinc-400' },
-    { id: 'in_progress', title: 'In Progress', color: 'border-indigo-500' },
-    { id: 'completed', title: 'Completed', color: 'border-emerald-500' },
+    { id: 'not_started', title: 'To Do', color: 'border-zinc-400 bg-zinc-400' },
+    { id: 'in_progress', title: 'In Progress', color: 'border-indigo-500 bg-indigo-500' },
+    { id: 'completed', title: 'Completed', color: 'border-emerald-500 bg-emerald-500' },
   ];
 
   // Priority Columns
   const priorityColumns: { id: Priority; title: string; color: string }[] = [
-    { id: 'urgent', title: 'Urgent', color: 'border-rose-500' },
-    { id: 'high', title: 'High Priority', color: 'border-amber-500' },
-    { id: 'medium', title: 'Medium Priority', color: 'border-sky-500' },
-    { id: 'low', title: 'Low Priority', color: 'border-zinc-400' },
+    { id: 'urgent', title: 'Urgent', color: 'border-rose-500 bg-rose-500' },
+    { id: 'high', title: 'High Priority', color: 'border-amber-500 bg-amber-500' },
+    { id: 'medium', title: 'Medium Priority', color: 'border-sky-500 bg-sky-500' },
+    { id: 'low', title: 'Low Priority', color: 'border-zinc-400 bg-zinc-400' },
   ];
 
   // Drag Handlers
@@ -77,10 +79,10 @@ export const KanbanBoard: React.FC = () => {
   return (
     <div className="space-y-4 pb-12 animate-in fade-in duration-200">
       {/* Top Controls */}
-      <div className="flex items-center justify-between p-3 rounded-2xl border border-zinc-200/80 bg-white dark:border-zinc-800/80 dark:bg-zinc-900/90 shadow-2xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 shadow-xs">
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
-            Group Columns by:
+            Group by:
           </span>
           <button
             onClick={() => setGroupBy('status')}
@@ -106,19 +108,15 @@ export const KanbanBoard: React.FC = () => {
 
         <button
           onClick={() => openCreateTaskModal()}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all"
+          className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all self-end sm:self-auto"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>New Task</span>
         </button>
       </div>
 
-      {/* Kanban Board Grid */}
-      <div
-        className={`grid gap-4 overflow-x-auto pb-4 ${
-          groupBy === 'status' ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
-        }`}
-      >
+      {/* Kanban Board Container - Fully Responsive Swipe / Grid */}
+      <div className="flex overflow-x-auto gap-4 pb-4 snap-x">
         {groupBy === 'status'
           ? statusColumns.map((col) => {
               const colTasks = activeTasks.filter((t) => t.status === col.id);
@@ -127,12 +125,12 @@ export const KanbanBoard: React.FC = () => {
                   key={col.id}
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDropOnStatus(e, col.id)}
-                  className="flex flex-col min-h-[500px] rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-3.5 dark:border-zinc-800/80 dark:bg-zinc-900/40"
+                  className="flex-1 min-w-[280px] sm:min-w-[320px] max-w-full sm:max-w-md snap-center shrink-0 flex flex-col min-h-[500px] rounded-2xl border border-zinc-200 bg-zinc-50/70 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/40"
                 >
                   {/* Column Header */}
-                  <div className="flex items-center justify-between pb-3 mb-2 border-b border-zinc-200/60 dark:border-zinc-800">
+                  <div className="flex items-center justify-between pb-3 mb-2 border-b border-zinc-200 dark:border-zinc-800">
                     <div className="flex items-center gap-2">
-                      <span className={`w-2 h-2 rounded-full border-2 ${col.color}`} />
+                      <span className={`w-2 h-2 rounded-full ${col.color}`} />
                       <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-800 dark:text-zinc-200">
                         {col.title}
                       </h4>
@@ -158,7 +156,7 @@ export const KanbanBoard: React.FC = () => {
                         draggable
                         onDragStart={(e) => handleDragStart(e, task.id)}
                         onClick={() => openEditTaskModal(task)}
-                        className="group p-3 rounded-xl border border-zinc-200/80 bg-white shadow-2xs hover:shadow-md hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 transition-all cursor-grab active:cursor-grabbing select-none"
+                        className="group p-3 rounded-xl border border-zinc-200 bg-white shadow-xs hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 transition-all cursor-grab active:cursor-grabbing select-none"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
@@ -185,8 +183,8 @@ export const KanbanBoard: React.FC = () => {
                           </p>
                         )}
 
-                        {/* Card Footer */}
-                        <div className="mt-3 pt-2 border-t border-zinc-100 dark:border-zinc-800/60 flex items-center justify-between text-[11px] text-zinc-400">
+                        {/* Card Footer with explicit Delete button */}
+                        <div className="mt-3 pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
                           <div className="flex items-center gap-1.5">
                             <Badge variant="priority" priority={task.priority} />
                             {task.subtasks.length > 0 && (
@@ -197,12 +195,26 @@ export const KanbanBoard: React.FC = () => {
                             )}
                           </div>
 
-                          {task.dueDate && (
-                            <span className="flex items-center gap-1 text-[10px] font-mono">
-                              <Calendar className="w-2.5 h-2.5" />
-                              {task.dueDate.slice(5)}
-                            </span>
-                          )}
+                          <div className="flex items-center gap-2">
+                            {task.dueDate && (
+                              <span className="flex items-center gap-1 text-[10px] font-mono">
+                                <Calendar className="w-2.5 h-2.5" />
+                                {task.dueDate.slice(5)}
+                              </span>
+                            )}
+
+                            {/* EXPLICIT DELETE BUTTON ON CARD */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteTask(task.id, false);
+                              }}
+                              title="Delete to Recycle Bin"
+                              className="p-1 rounded text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -223,11 +235,11 @@ export const KanbanBoard: React.FC = () => {
                   key={col.id}
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDropOnPriority(e, col.id)}
-                  className="flex flex-col min-h-[500px] rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-3.5 dark:border-zinc-800/80 dark:bg-zinc-900/40"
+                  className="flex-1 min-w-[260px] sm:min-w-[280px] snap-center shrink-0 flex flex-col min-h-[500px] rounded-2xl border border-zinc-200 bg-zinc-50/70 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/40"
                 >
-                  <div className="flex items-center justify-between pb-3 mb-2 border-b border-zinc-200/60 dark:border-zinc-800">
+                  <div className="flex items-center justify-between pb-3 mb-2 border-b border-zinc-200 dark:border-zinc-800">
                     <div className="flex items-center gap-2">
-                      <span className={`w-2 h-2 rounded-full border-2 ${col.color}`} />
+                      <span className={`w-2 h-2 rounded-full ${col.color}`} />
                       <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-800 dark:text-zinc-200">
                         {col.title}
                       </h4>
@@ -252,7 +264,7 @@ export const KanbanBoard: React.FC = () => {
                         draggable
                         onDragStart={(e) => handleDragStart(e, task.id)}
                         onClick={() => openEditTaskModal(task)}
-                        className="group p-3 rounded-xl border border-zinc-200/80 bg-white shadow-2xs hover:shadow-md hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 transition-all cursor-grab active:cursor-grabbing select-none"
+                        className="group p-3 rounded-xl border border-zinc-200 bg-white shadow-xs hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 transition-all cursor-grab active:cursor-grabbing select-none"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
@@ -269,17 +281,31 @@ export const KanbanBoard: React.FC = () => {
                           </button>
                         </div>
 
-                        <div className="mt-3 pt-2 border-t border-zinc-100 dark:border-zinc-800/60 flex items-center justify-between text-[11px] text-zinc-400">
+                        <div className="mt-3 pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
                           <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
                             #{task.category}
                           </span>
 
-                          {task.dueDate && (
-                            <span className="flex items-center gap-1 text-[10px] font-mono">
-                              <Calendar className="w-2.5 h-2.5" />
-                              {task.dueDate.slice(5)}
-                            </span>
-                          )}
+                          <div className="flex items-center gap-2">
+                            {task.dueDate && (
+                              <span className="flex items-center gap-1 text-[10px] font-mono">
+                                <Calendar className="w-2.5 h-2.5" />
+                                {task.dueDate.slice(5)}
+                              </span>
+                            )}
+
+                            {/* EXPLICIT DELETE BUTTON */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteTask(task.id, false);
+                              }}
+                              title="Delete to Recycle Bin"
+                              className="p-1 rounded text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}

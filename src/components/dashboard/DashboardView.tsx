@@ -106,7 +106,7 @@ export const DashboardView: React.FC = () => {
         </div>
 
         {/* Motivational quote card */}
-        <div className="relative max-w-md rounded-2xl border border-zinc-200/60 bg-white/70 p-3.5 backdrop-blur-xs dark:border-zinc-800/60 dark:bg-zinc-850/60">
+        <div className="relative max-w-md rounded-2xl border border-zinc-200/60 bg-white/70 p-3.5 backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
           <button
             onClick={rotateQuote}
             title="Next quote"

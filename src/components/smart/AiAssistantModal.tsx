@@ -221,7 +221,7 @@ export const AiAssistantModal: React.FC = () => {
                 dueTodayTasks.map((t) => (
                   <div
                     key={t.id}
-                    className="p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-850/50 flex items-center justify-between text-xs"
+                    className="p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 flex items-center justify-between text-xs"
                   >
                     <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">
                       {t.title}
@@ -267,7 +267,7 @@ export const AiAssistantModal: React.FC = () => {
 
             {/* Generated Subtasks Preview */}
             {generatedSubtasks.length > 0 && (
-              <div className="p-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-850/50 space-y-2">
+              <div className="p-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60 space-y-2">
                 <h5 className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
                   Generated Subtasks ({generatedSubtasks.length})
                 </h5>
@@ -316,14 +316,14 @@ export const AiAssistantModal: React.FC = () => {
         {activeTab === 'audit' && (
           <div className="space-y-3 pt-2 text-xs">
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-850/50">
+              <div className="p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60">
                 <span className="text-zinc-400 block text-[11px]">Overdue Bottlenecks</span>
                 <span className="text-lg font-bold text-rose-600 dark:text-rose-400">
                   {overdueTasks.length} items
                 </span>
               </div>
 
-              <div className="p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-850/50">
+              <div className="p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/60">
                 <span className="text-zinc-400 block text-[11px]">Urgent Pressure</span>
                 <span className="text-lg font-bold text-amber-600 dark:text-amber-400">
                   {urgentTasks.length} items

@@ -285,7 +285,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           return updated;
         });
 
-        showToast(`Moved to trash: "${taskToDelete.title.slice(0, 25)}"`, {
+        showToast(`Moved to Recycle Bin (Kept for 10 days): "${taskToDelete.title.slice(0, 25)}"`, {
           label: 'Undo',
           onClick: () => {
             setTasks((prev) => {
