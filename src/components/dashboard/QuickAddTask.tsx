@@ -53,8 +53,40 @@ export const QuickAddTask: React.FC = () => {
         </button>
       </form>
 
-      {/* Live Natural Language Tag Chips */}
-      {parsed && (parsed.dueDate || parsed.priority || parsed.category || parsed.tags.length > 0) && (
+      {/* Quick Work Helpers (when not yet typed or detected) */}
+      {!parsed || (!parsed.dueDate && !parsed.priority && !parsed.category && parsed.tags.length === 0) ? (
+        <div className="mt-2.5 pt-2 border-t border-zinc-100 dark:border-zinc-800/60 flex flex-wrap items-center gap-1.5 text-xs text-zinc-500">
+          <span className="text-[11px] text-zinc-400 mr-0.5">Quick append:</span>
+          <button
+            type="button"
+            onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} today` : 'today '))}
+            className="px-2 py-0.5 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-medium transition-colors"
+          >
+            + today
+          </button>
+          <button
+            type="button"
+            onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} tomorrow` : 'tomorrow '))}
+            className="px-2 py-0.5 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-medium transition-colors"
+          >
+            + tomorrow
+          </button>
+          <button
+            type="button"
+            onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} !urgent` : '!urgent '))}
+            className="px-2 py-0.5 rounded-md bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 text-[11px] font-medium transition-colors"
+          >
+            ! urgent
+          </button>
+          <button
+            type="button"
+            onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} #work` : '#work '))}
+            className="px-2 py-0.5 rounded-md bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-[11px] font-medium transition-colors"
+          >
+            # work
+          </button>
+        </div>
+      ) : (
         <div className="mt-2.5 pt-2 border-t border-zinc-100 dark:border-zinc-800/60 flex flex-wrap items-center gap-1.5 animate-in fade-in duration-150">
           <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 mr-1">
             Detected:
