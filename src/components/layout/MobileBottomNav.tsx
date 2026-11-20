@@ -282,16 +282,17 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           </div>
         )}
 
-        {/* Sliding Active Circle Background across slots */}
+        {/* Sliding Active Full Capsule Pill across slots (hidden on slot 2 - center '+' FAB) */}
         <div
           className={cn(
-            'absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-full transition-all duration-150 ease-out pointer-events-none',
-            isScrubbing && !isCancel
-              ? 'opacity-100 bg-[#DC2626]/15 dark:bg-[#DC2626]/25 border border-[#DC2626]/35 dark:border-[#DC2626]/45 shadow-md shadow-[#DC2626]/20 scale-100'
-              : 'opacity-0 scale-75'
+            'absolute top-0.5 bottom-0.5 rounded-2xl transition-all duration-150 ease-out pointer-events-none',
+            isScrubbing && scrubSlot !== 2 && !isCancel
+              ? 'opacity-100 bg-[#DC2626]/12 dark:bg-[#DC2626]/20 border border-[#DC2626]/30 dark:border-[#DC2626]/40 shadow-sm shadow-[#DC2626]/20 scale-100'
+              : 'opacity-0 scale-95'
           )}
           style={{
-            left: `${scrubSlot * 20 + 10}%`,
+            left: `calc(${scrubSlot * 20}% + 4px)`,
+            width: 'calc(20% - 8px)',
           }}
         />
 
@@ -304,7 +305,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             onCloseMobileSidebar();
           }}
           className={cn(
-            'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-full transition-all cursor-pointer select-none active:scale-95 flex-1 z-10',
+            'flex flex-col items-center justify-center gap-1 py-1 px-2 rounded-2xl transition-all cursor-pointer select-none active:scale-95 flex-1 z-10',
             (isScrubbing ? scrubSlot === 0 : isHomeActive)
               ? 'text-[#DC2626] dark:text-[#EF4444] scale-105'
               : 'text-zinc-500 dark:text-[#A3A3A3] hover:text-zinc-900 dark:hover:text-[#FAFAFA]'
@@ -328,7 +329,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             onCloseMobileSidebar();
           }}
           className={cn(
-            'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-full transition-all cursor-pointer select-none active:scale-95 relative flex-1 z-10',
+            'flex flex-col items-center justify-center gap-1 py-1 px-2 rounded-2xl transition-all cursor-pointer select-none active:scale-95 relative flex-1 z-10',
             (isScrubbing ? scrubSlot === 1 : isTasksActive)
               ? 'text-[#DC2626] dark:text-[#EF4444] scale-105'
               : 'text-zinc-500 dark:text-[#A3A3A3] hover:text-zinc-900 dark:hover:text-[#FAFAFA]'
@@ -376,7 +377,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             onCloseMobileSidebar();
           }}
           className={cn(
-            'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-full transition-all cursor-pointer select-none active:scale-95 flex-1 z-10',
+            'flex flex-col items-center justify-center gap-1 py-1 px-2 rounded-2xl transition-all cursor-pointer select-none active:scale-95 flex-1 z-10',
             (isScrubbing ? scrubSlot === 3 : isKanbanActive)
               ? 'text-[#DC2626] dark:text-[#EF4444] scale-105'
               : 'text-zinc-500 dark:text-[#A3A3A3] hover:text-zinc-900 dark:hover:text-[#FAFAFA]'
@@ -399,7 +400,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             onToggleMobileSidebar();
           }}
           className={cn(
-            'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-full transition-all cursor-pointer select-none active:scale-95 flex-1 z-10',
+            'flex flex-col items-center justify-center gap-1 py-1 px-2 rounded-2xl transition-all cursor-pointer select-none active:scale-95 flex-1 z-10',
             (isScrubbing ? scrubSlot === 4 : isMenuActive)
               ? 'text-[#DC2626] dark:text-[#EF4444] scale-105'
               : 'text-zinc-500 dark:text-[#A3A3A3] hover:text-zinc-900 dark:hover:text-[#FAFAFA]'
