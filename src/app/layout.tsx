@@ -14,13 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Zenith | Personal Productivity OS',
-  description: 'Premium personal productivity dashboard, tasks, Pomodoro focus timer, habit tracker, and analytics.',
+  title: 'Kaushal OS | Personal Productivity Workspace',
+  description: 'Kaushal OS - Personal productivity dashboard, tasks, Pomodoro focus timer, habit tracker, and analytics.',
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Zenith',
+    title: 'Kaushal OS',
   },
 };
 

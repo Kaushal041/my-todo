@@ -1,7 +1,7 @@
 {
-  "name": "Zenith - Personal Productivity OS",
-  "short_name": "Zenith",
-  "description": "Premium personal productivity dashboard, tasks, Pomodoro timer, habits, and analytics.",
+  "name": "Kaushal OS - Personal Productivity",
+  "short_name": "Kaushal OS",
+  "description": "Personal productivity dashboard, tasks, Pomodoro timer, habits, and analytics.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#09090b",

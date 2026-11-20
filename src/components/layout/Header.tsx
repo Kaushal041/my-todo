@@ -69,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
     settings: { title: 'Settings', subtitle: 'Personal preferences and data management' },
   };
 
-  const currentViewInfo = viewTitles[activeView] || { title: 'Zenith', subtitle: '' };
+  const currentViewInfo = viewTitles[activeView] || { title: 'Kaushal OS', subtitle: 'Personal Productivity Workspace' };
 
   const toggleTheme = () => {
     const nextTheme = settings.theme === 'dark' ? 'light' : 'dark';

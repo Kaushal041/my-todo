@@ -122,11 +122,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
           <div className="flex items-center justify-between px-2 pt-1">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-red-gradient flex items-center justify-center shadow-lg shadow-[#DC2626]/35 text-white font-black text-base border border-[#EF4444]/40">
-                Z
+                K
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-black tracking-tight text-zinc-900 dark:text-[#FAFAFA] flex items-center gap-1.5">
-                  Zenith
+                  Kaushal OS
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-pulse" />
                 </span>
                 <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 dark:text-[#A3A3A3]">
