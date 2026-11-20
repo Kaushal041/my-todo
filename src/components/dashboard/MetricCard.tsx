@@ -28,27 +28,27 @@ export const MetricCard: React.FC<MetricCardProps> = ({
     <div
       onClick={onClick}
       className={cn(
-        'group relative overflow-hidden rounded-2xl border bg-white p-3.5 sm:p-4.5 shadow-xs transition-all duration-200 dark:bg-zinc-900 select-none',
+        'group relative overflow-hidden rounded-2xl border p-3.5 sm:p-4.5 shadow-xs transition-all duration-200 select-none cursor-pointer',
         alert
-          ? 'border-rose-300 bg-rose-50/40 dark:border-rose-900/50 dark:bg-rose-950/20'
+          ? 'border-[#EF4444] bg-[#171717] hover:border-[#EF4444] shadow-[0_0_15px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.5)]'
           : highlight
-          ? 'border-indigo-300 bg-indigo-50/30 dark:border-indigo-900/60 dark:bg-indigo-950/20'
-          : 'border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700',
-        onClick && 'cursor-pointer hover:shadow-md'
+          ? 'border-[#DC2626]/70 bg-[#171717] hover:border-[#DC2626] shadow-[0_0_15px_rgba(220,38,38,0.25)] hover:shadow-[0_0_22px_rgba(220,38,38,0.45)]'
+          : 'border-[#292929] bg-[#171717] hover:border-[#DC2626]/70 hover:shadow-[0_0_18px_rgba(220,38,38,0.2)]',
+        'hover:-translate-y-1 active:translate-y-0 active:scale-[0.99]'
       )}
     >
       <div className="flex items-start justify-between">
-        <span className="text-[11px] sm:text-xs font-semibold text-zinc-500 dark:text-zinc-400 tracking-tight">
+        <span className="text-[11px] sm:text-xs font-semibold text-[#A3A3A3] tracking-tight transition-colors group-hover:text-[#FAFAFA]">
           {title}
         </span>
         <div
           className={cn(
-            'rounded-xl p-1.5 sm:p-2 transition-transform group-hover:scale-105',
+            'rounded-xl p-1.5 sm:p-2 transition-all duration-200 group-hover:scale-110 group-hover:rotate-3 shadow-2xs',
             alert
-              ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400'
+              ? 'bg-[#EF4444]/20 text-[#EF4444] group-hover:bg-[#EF4444]/30'
               : highlight
-              ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400'
-              : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+              ? 'bg-[#DC2626]/20 text-[#DC2626] group-hover:bg-[#DC2626]/30'
+              : 'bg-[#111111] text-[#A3A3A3] group-hover:text-[#DC2626]'
           )}
         >
           <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -60,8 +60,8 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           className={cn(
             'text-xl sm:text-2xl font-bold tracking-tight',
             alert
-              ? 'text-rose-600 dark:text-rose-400'
-              : 'text-zinc-900 dark:text-white'
+              ? 'text-[#EF4444]'
+              : 'text-[#FAFAFA]'
           )}
         >
           {value}
@@ -70,7 +70,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           <span
             className={cn(
               'text-[11px] font-semibold flex items-center',
-              trendUp ? 'text-emerald-500' : 'text-zinc-400'
+              trendUp ? 'text-emerald-400' : 'text-[#A3A3A3]'
             )}
           >
             {trend}
@@ -79,7 +79,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       </div>
 
       {subtitle && (
-        <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500 truncate">
+        <p className="mt-1 text-xs text-[#A3A3A3] truncate">
           {subtitle}
         </p>
       )}

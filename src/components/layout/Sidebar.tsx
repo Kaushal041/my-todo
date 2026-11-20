@@ -66,19 +66,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
       <button
         onClick={() => handleSelectView(view)}
         className={cn(
-          'w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-all group select-none text-left',
+          'w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 group select-none text-left cursor-pointer active:scale-[0.98]',
           isActive
-            ? 'bg-indigo-600/10 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-400 font-semibold'
-            : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/80 dark:text-zinc-400 dark:hover:text-zinc-200 dark:hover:bg-zinc-800/60'
+            ? 'bg-[#DC2626]/15 text-[#FAFAFA] font-bold border-l-4 border-[#DC2626] shadow-[0_0_15px_rgba(220,38,38,0.25)]'
+            : 'text-[#A3A3A3] hover:text-[#FAFAFA] hover:bg-[#171717] hover:border-l-4 hover:border-[#DC2626] hover:translate-x-1'
         )}
       >
         <div className="flex items-center gap-2.5 truncate">
           <Icon
             className={cn(
-              'w-4 h-4 shrink-0 transition-colors',
+              'w-4 h-4 shrink-0 transition-all duration-200 group-hover:scale-125 group-hover:rotate-6',
               isActive
-                ? 'text-indigo-600 dark:text-indigo-400'
-                : 'text-zinc-400 group-hover:text-zinc-600 dark:text-zinc-500 dark:group-hover:text-zinc-300'
+                ? 'text-[#EF4444]'
+                : 'text-[#A3A3A3] group-hover:text-[#EF4444]'
             )}
           />
           <span className="truncate">{label}</span>
@@ -86,12 +86,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
         {typeof badge === 'number' && badge > 0 && (
           <span
             className={cn(
-              'px-1.5 py-0.5 rounded-full text-xs font-semibold shrink-0 tabular-nums',
+              'px-1.5 py-0.5 rounded-full text-xs font-bold shrink-0 tabular-nums transition-transform duration-150 group-hover:scale-105',
               badgeVariant === 'urgent'
-                ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400'
+                ? 'bg-[#DC2626]/20 text-[#EF4444] border border-[#DC2626]/40 shadow-[0_0_8px_rgba(239,68,68,0.3)]'
                 : isActive
-                ? 'bg-indigo-600/20 text-indigo-600 dark:text-indigo-300'
-                : 'bg-zinc-200/70 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+                ? 'bg-[#DC2626]/25 text-[#FAFAFA]'
+                : 'bg-[#171717] text-[#A3A3A3] border border-[#292929]'
             )}
           >
             {badge}
@@ -106,14 +106,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden animate-in fade-in"
+          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm md:hidden animate-in fade-in"
           onClick={onCloseMobile}
         />
       )}
 
       <aside
         className={cn(
-          'fixed md:static inset-y-0 left-0 z-40 w-64 shrink-0 flex flex-col justify-between border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 p-4 transition-transform duration-200 ease-in-out shadow-xl md:shadow-none',
+          'fixed md:static inset-y-0 left-0 z-40 w-64 shrink-0 flex flex-col justify-between border-r border-[#292929] bg-[#080808] p-4 transition-transform duration-200 ease-in-out shadow-2xl md:shadow-none',
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         )}
       >
@@ -121,15 +121,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
           {/* Logo & Workspace */}
           <div className="flex items-center justify-between px-2 pt-1">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-400 flex items-center justify-center shadow-md shadow-indigo-500/25 text-white font-bold text-base">
+              <div className="w-8 h-8 rounded-xl bg-red-gradient flex items-center justify-center shadow-lg shadow-[#DC2626]/35 text-white font-black text-base border border-[#EF4444]/40">
                 Z
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-1.5">
+                <span className="text-sm font-black tracking-tight text-[#FAFAFA] flex items-center gap-1.5">
                   Zenith
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-pulse" />
                 </span>
-                <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 dark:text-zinc-500">
+                <span className="text-[10px] uppercase font-mono tracking-wider text-[#A3A3A3]">
                   Productivity OS
                 </span>
               </div>
@@ -139,7 +139,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
               <button
                 onClick={() => setIsAiModalOpen(true)}
                 title="AI Assistant & Planner"
-                className="p-1.5 rounded-lg border border-indigo-200/60 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:border-indigo-900/60 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/50 dark:text-indigo-400 transition-colors"
+                className="p-1.5 rounded-lg border border-[#292929] bg-[#171717] hover:bg-[#DC2626]/15 hover:border-[#DC2626] text-[#EF4444] transition-colors"
               >
                 <Sparkles className="w-3.5 h-3.5" />
               </button>
@@ -147,7 +147,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
               {/* Mobile close button */}
               <button
                 onClick={onCloseMobile}
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 md:hidden"
+                className="p-1.5 rounded-lg text-[#A3A3A3] hover:text-[#FAFAFA] md:hidden"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -157,11 +157,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
           {/* Quick Add Task Button */}
           <button
             onClick={() => openCreateTaskModal()}
-            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm shadow-sm shadow-indigo-600/30 transition-all active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#DC2626] hover:bg-[#EF4444] text-[#FAFAFA] font-bold text-sm shadow-md shadow-[#DC2626]/35 hover:shadow-lg hover:shadow-[#EF4444]/40 transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 transition-transform group-hover:rotate-90 duration-200" />
             <span>New Task</span>
-            <span className="ml-auto text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-700/50 text-indigo-200">
+            <span className="ml-auto text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-[#171717] text-[#A3A3A3] border border-[#292929]">
               N
             </span>
           </button>

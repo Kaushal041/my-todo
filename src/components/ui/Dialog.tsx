@@ -59,18 +59,18 @@ export const Dialog: React.FC<DialogProps> = ({
       {/* Modal Dialog Card */}
       <div
         className={cn(
-          'relative w-full rounded-2xl border border-zinc-200 bg-white p-4 sm:p-6 shadow-2xl transition-all duration-200 animate-in zoom-in-95 dark:border-zinc-800 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 z-10 max-h-[92vh] flex flex-col',
+          'relative w-full rounded-2xl border border-[#292929] bg-[#171717] p-4 sm:p-6 shadow-2xl transition-all duration-200 animate-in zoom-in-95 text-[#FAFAFA] z-10 max-h-[92vh] flex flex-col shadow-[0_0_30px_rgba(220,38,38,0.25)]',
           widthClasses[maxWidth]
         )}
       >
-        <div className="flex items-start justify-between pb-4 border-b border-zinc-100 dark:border-zinc-800/80">
+        <div className="flex items-start justify-between pb-4 border-b border-[#292929]">
           <div>
-            {title && <h2 className="text-lg font-semibold tracking-tight">{title}</h2>}
-            {description && <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{description}</p>}
+            {title && <h2 className="text-lg font-black tracking-tight text-[#FAFAFA]">{title}</h2>}
+            {description && <p className="text-xs text-[#A3A3A3] mt-0.5">{description}</p>}
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition-colors"
+            className="rounded-xl p-1.5 text-[#A3A3A3] hover:bg-[#111111] hover:text-[#EF4444] transition-all duration-150 cursor-pointer hover:scale-110 active:scale-95"
           >
             <X className="w-4 h-4" />
           </button>

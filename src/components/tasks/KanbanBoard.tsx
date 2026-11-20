@@ -160,7 +160,7 @@ export const KanbanBoard: React.FC = () => {
                         draggable
                         onDragStart={(e) => handleDragStart(e, task.id)}
                         onClick={() => openEditTaskModal(task)}
-                        className="group p-3 rounded-xl border border-zinc-200 bg-white shadow-xs hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 transition-all cursor-grab active:cursor-grabbing select-none"
+                        className="group p-3 rounded-xl border border-zinc-200 bg-white shadow-xs hover:border-indigo-400/80 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-indigo-700/80 hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 cursor-grab active:cursor-grabbing select-none"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
@@ -302,7 +302,7 @@ export const KanbanBoard: React.FC = () => {
                         draggable
                         onDragStart={(e) => handleDragStart(e, task.id)}
                         onClick={() => openEditTaskModal(task)}
-                        className="group p-3 rounded-xl border border-zinc-200 bg-white shadow-xs hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 transition-all cursor-grab active:cursor-grabbing select-none"
+                        className="group p-3 rounded-xl border border-zinc-200 bg-white shadow-xs hover:border-indigo-400/80 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-indigo-700/80 hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 cursor-grab active:cursor-grabbing select-none"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">

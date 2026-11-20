@@ -121,7 +121,7 @@ export const PomodoroTimer: React.FC = () => {
               setMode('work');
               setIsActive(false);
             }}
-            className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 ${
               mode === 'work'
                 ? 'bg-white text-indigo-600 shadow-xs dark:bg-zinc-900 dark:text-indigo-400'
                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -136,7 +136,7 @@ export const PomodoroTimer: React.FC = () => {
               setMode('short_break');
               setIsActive(false);
             }}
-            className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 ${
               mode === 'short_break'
                 ? 'bg-white text-emerald-600 shadow-xs dark:bg-zinc-900 dark:text-emerald-400'
                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -151,7 +151,7 @@ export const PomodoroTimer: React.FC = () => {
               setMode('long_break');
               setIsActive(false);
             }}
-            className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 ${
               mode === 'long_break'
                 ? 'bg-white text-sky-600 shadow-xs dark:bg-zinc-900 dark:text-sky-400'
                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'

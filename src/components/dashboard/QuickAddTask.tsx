@@ -35,22 +35,22 @@ export const QuickAddTask: React.FC = () => {
   };
 
   return (
-    <div className="rounded-2xl border border-zinc-200/90 bg-white p-3.5 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900/90 transition-all focus-within:border-indigo-500/80 focus-within:ring-2 focus-within:ring-indigo-500/20">
+    <div className="rounded-2xl border border-[#292929] bg-[#171717] p-3.5 shadow-sm transition-all focus-within:border-[#DC2626] focus-within:shadow-[0_0_20px_rgba(220,38,38,0.25)]">
       <form onSubmit={handleSubmit} className="flex items-center gap-2">
-        <div className="text-zinc-400 pl-1">
-          <Sparkles className="w-4 h-4 text-indigo-500 animate-pulse" />
+        <div className="text-[#EF4444] pl-1">
+          <Sparkles className="w-4 h-4 text-[#EF4444] animate-pulse" />
         </div>
         <input
           type="text"
           placeholder="Quick add task... (e.g. 'Submit report tomorrow at 3pm !urgent #work')"
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
-          className="flex-1 bg-transparent text-sm placeholder:text-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          className="flex-1 bg-transparent text-sm placeholder:text-[#A3A3A3] focus:outline-none text-[#FAFAFA]"
         />
         <button
           type="submit"
           disabled={!inputVal.trim()}
-          className="rounded-xl bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1.5 shrink-0"
+          className="rounded-xl bg-[#DC2626] hover:bg-[#EF4444] px-3.5 py-1.5 text-xs font-bold text-[#FAFAFA] shadow-sm shadow-[#DC2626]/40 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1.5 shrink-0 hover:scale-105 active:scale-95 cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>Add</span>
@@ -59,26 +59,26 @@ export const QuickAddTask: React.FC = () => {
 
       {/* Quick Work Helpers (when not yet typed or detected) */}
       {!parsed || (!parsed.dueDate && !parsed.priority && !parsed.category && parsed.tags.length === 0 && !matchedPlatform && !isCodeMerged) ? (
-        <div className="mt-2.5 pt-2 border-t border-zinc-100 dark:border-zinc-800/60 flex flex-wrap items-center gap-1.5 text-xs text-zinc-500">
-          <span className="text-[11px] text-zinc-400 mr-0.5">Quick append:</span>
+        <div className="mt-2.5 pt-2 border-t border-[#292929] flex flex-wrap items-center gap-1.5 text-xs text-[#A3A3A3]">
+          <span className="text-[11px] text-[#A3A3A3] mr-0.5">Quick append:</span>
           <button
             type="button"
             onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} today` : 'today '))}
-            className="px-2 py-0.5 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-medium transition-colors"
+            className="px-2.5 py-1 rounded-lg bg-[#111111] hover:bg-[#202020] text-[#FAFAFA] border border-[#292929] hover:border-[#DC2626] text-[11px] font-medium transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
           >
             + today
           </button>
           <button
             type="button"
             onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} tomorrow` : 'tomorrow '))}
-            className="px-2 py-0.5 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-medium transition-colors"
+            className="px-2.5 py-1 rounded-lg bg-[#111111] hover:bg-[#202020] text-[#FAFAFA] border border-[#292929] hover:border-[#DC2626] text-[11px] font-medium transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
           >
             + tomorrow
           </button>
           <button
             type="button"
             onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} !urgent` : '!urgent '))}
-            className="px-2 py-0.5 rounded-md bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 text-[11px] font-medium transition-colors"
+            className="px-2.5 py-1 rounded-lg bg-[#DC2626]/15 hover:bg-[#DC2626]/25 text-[#EF4444] border border-[#DC2626]/40 hover:border-[#EF4444] text-[11px] font-semibold transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 shadow-[0_0_10px_rgba(220,38,38,0.25)]"
           >
             ! urgent
           </button>
@@ -89,7 +89,7 @@ export const QuickAddTask: React.FC = () => {
               key={p}
               type="button"
               onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} ${p}` : `${p} `))}
-              className="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-300 text-[11px] font-medium transition-colors"
+              className="px-2.5 py-1 rounded-lg bg-[#111111] hover:bg-[#1f1f1f] text-[#FAFAFA] border border-[#292929] hover:border-[#DC2626] text-[11px] font-medium transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
             >
               {p}
             </button>
@@ -98,33 +98,33 @@ export const QuickAddTask: React.FC = () => {
           <button
             type="button"
             onClick={() => setInputVal((prev) => (prev ? `${prev.trim()} merged` : 'merged '))}
-            className="px-2 py-0.5 rounded-md bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 text-[11px] font-medium transition-colors"
+            className="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 text-[11px] font-medium transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
           >
             ✓ merged
           </button>
         </div>
       ) : (
-        <div className="mt-2.5 pt-2 border-t border-zinc-100 dark:border-zinc-800/60 flex flex-wrap items-center gap-1.5 animate-in fade-in duration-150">
-          <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 mr-1">
+        <div className="mt-2.5 pt-2 border-t border-[#292929] flex flex-wrap items-center gap-1.5 animate-in fade-in duration-150">
+          <span className="text-[10px] uppercase font-mono tracking-wider text-[#A3A3A3] mr-1">
             Detected:
           </span>
 
           {matchedPlatform && (
-            <Badge variant="outline" className="gap-1 bg-blue-50/70 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-200/50">
+            <Badge variant="outline" className="gap-1 bg-[#171717] text-[#FAFAFA] border-[#292929]">
               <Layers className="w-2.5 h-2.5" />
               <span>{matchedPlatform}</span>
             </Badge>
           )}
 
           {isCodeMerged && (
-            <Badge variant="outline" className="gap-1 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-200/50">
+            <Badge variant="outline" className="gap-1 bg-emerald-500/15 text-emerald-400 border-emerald-500/30">
               <GitMerge className="w-2.5 h-2.5" />
               <span>Merged</span>
             </Badge>
           )}
 
           {parsed.dueDate && (
-            <Badge variant="outline" className="gap-1 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border-indigo-200/50">
+            <Badge variant="outline" className="gap-1 bg-[#DC2626]/15 text-[#EF4444] border-[#DC2626]/40">
               <Calendar className="w-3 h-3" />
               <span>{parsed.dueDate}</span>
               {parsed.dueTime && (
@@ -141,13 +141,13 @@ export const QuickAddTask: React.FC = () => {
           )}
 
           {parsed.category && (
-            <Badge variant="default" className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+            <Badge variant="default" className="bg-[#171717] text-[#FAFAFA] border border-[#292929]">
               #{parsed.category}
             </Badge>
           )}
 
           {parsed.tags.map((tag) => (
-            <Badge key={tag} variant="outline" className="gap-1 text-zinc-500">
+            <Badge key={tag} variant="outline" className="gap-1 text-[#A3A3A3] border-[#292929]">
               <Tag className="w-2.5 h-2.5" />
               @{tag}
             </Badge>

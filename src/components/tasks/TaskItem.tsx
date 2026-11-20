@@ -70,14 +70,16 @@ export const TaskItem: React.FC<TaskItemProps> = ({
 
   return (
     <div
-      className={`group relative flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 p-3 rounded-xl border transition-all select-none ${
+      className={`group relative flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 p-3.5 rounded-xl border transition-all duration-200 select-none ${
         isCompleted
-          ? 'bg-zinc-50/60 border-zinc-200/60 dark:bg-zinc-900/40 dark:border-zinc-800/50 opacity-80'
+          ? 'bg-[#171717]/60 border-[#292929]/60 opacity-70'
           : task.inTrash
-          ? 'bg-rose-50/20 border-rose-200/60 dark:bg-rose-950/10 dark:border-rose-900/40'
+          ? 'bg-[#991B1B]/15 border-[#DC2626]/40'
           : isSelected
-          ? 'bg-indigo-50/50 border-indigo-300 dark:bg-indigo-950/30 dark:border-indigo-800'
-          : 'bg-white border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs'
+          ? 'bg-[#DC2626]/15 border-[#DC2626] shadow-[0_0_15px_rgba(220,38,38,0.3)]'
+          : task.priority === 'urgent' || task.priority === 'high'
+          ? 'bg-[#171717] border-[#292929] hover:border-[#EF4444] hover:shadow-[0_0_22px_rgba(239,68,68,0.3)] hover:-translate-y-0.5'
+          : 'bg-[#171717] border-[#292929] hover:border-[#DC2626] hover:shadow-[0_0_18px_rgba(220,38,38,0.25)] hover:-translate-y-0.5'
       }`}
     >
       {/* Left section: Checkbox, Selection, Title & Badges */}
@@ -88,7 +90,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             type="checkbox"
             checked={isSelected}
             onChange={() => onToggleSelect(task.id)}
-            className="w-4 h-4 mt-0.5 sm:mt-0 rounded text-indigo-600 focus:ring-indigo-500/30 border-zinc-300 dark:border-zinc-700 cursor-pointer shrink-0"
+            className="w-4 h-4 mt-0.5 sm:mt-0 rounded text-[#DC2626] focus:ring-[#DC2626]/30 border-[#292929] bg-[#111111] cursor-pointer shrink-0 transition-transform active:scale-90"
             title="Select for bulk action"
           />
         )}
@@ -98,16 +100,16 @@ export const TaskItem: React.FC<TaskItemProps> = ({
           <button
             onClick={() => toggleTaskComplete(task.id)}
             title={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
-            className={`w-5 h-5 mt-0.5 sm:mt-0 rounded-md flex items-center justify-center transition-all shrink-0 cursor-pointer ${
+            className={`w-5 h-5 mt-0.5 sm:mt-0 rounded-md flex items-center justify-center transition-all duration-150 shrink-0 cursor-pointer hover:scale-110 active:scale-95 ${
               isCompleted
-                ? 'bg-emerald-600 text-white shadow-xs'
-                : 'border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 hover:bg-indigo-50/50 dark:hover:border-indigo-500'
+                ? 'bg-[#DC2626] text-white shadow-xs'
+                : 'border border-[#292929] bg-[#111111] hover:border-[#DC2626] hover:bg-[#DC2626]/15'
             }`}
           >
             {isCompleted && <Check className="w-3.5 h-3.5 stroke-[2.5]" />}
           </button>
         ) : (
-          <div className="w-5 h-5 rounded-md flex items-center justify-center bg-rose-500/10 text-rose-500 shrink-0">
+          <div className="w-5 h-5 rounded-md flex items-center justify-center bg-[#991B1B]/20 text-[#EF4444] shrink-0">
             <Trash2 className="w-3.5 h-3.5" />
           </div>
         )}
@@ -119,10 +121,10 @@ export const TaskItem: React.FC<TaskItemProps> = ({
         >
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`text-sm font-medium tracking-tight break-words ${
+              className={`text-sm font-semibold tracking-tight break-words transition-colors ${
                 isCompleted
-                  ? 'line-through text-zinc-400 dark:text-zinc-500'
-                  : 'text-zinc-900 dark:text-zinc-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors'
+                  ? 'line-through text-[#A3A3A3]/60'
+                  : 'text-[#FAFAFA] group-hover:text-[#EF4444]'
               }`}
             >
               {task.title}
@@ -258,7 +260,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
                   setActiveView('pomodoro');
                 }}
                 title="Focus on this task with Pomodoro"
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-indigo-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-indigo-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-150 cursor-pointer hover:scale-110 active:scale-95"
               >
                 <Timer className="w-3.5 h-3.5" />
               </button>
@@ -270,7 +272,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
                   duplicateTask(task.id);
                 }}
                 title="Duplicate task"
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-150 cursor-pointer hover:scale-110 active:scale-95"
               >
                 <Copy className="w-3.5 h-3.5" />
               </button>
@@ -282,7 +284,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
                   deleteTask(task.id, false);
                 }}
                 title="Move to Recycle Bin (10-day retention)"
-                className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-zinc-500 hover:text-rose-600 bg-zinc-100/70 hover:bg-rose-50 dark:bg-zinc-800/60 dark:hover:bg-rose-950/40 dark:text-zinc-400 dark:hover:text-rose-400 border border-zinc-200/50 dark:border-zinc-700/50 hover:border-rose-300 dark:hover:border-rose-900 transition-all cursor-pointer"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-zinc-500 hover:text-rose-600 bg-zinc-100/70 hover:bg-rose-50 dark:bg-zinc-800/60 dark:hover:bg-rose-950/40 dark:text-zinc-400 dark:hover:text-rose-400 border border-zinc-200/50 dark:border-zinc-700/50 hover:border-rose-300 dark:hover:border-rose-900 transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span className="text-[11px]">Delete</span>

@@ -8,21 +8,21 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', children, disabled, ...props }, ref) => {
-    const base = 'inline-flex items-center justify-center font-medium transition-all duration-150 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer';
+    const base = 'inline-flex items-center justify-center font-semibold transition-all duration-200 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626]/50 disabled:pointer-events-none disabled:opacity-50 select-none cursor-pointer active:scale-[0.97] active:duration-75';
 
     const variants: Record<string, string> = {
       primary:
-        'bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm shadow-indigo-600/30 active:scale-[0.98]',
+        'bg-[#DC2626] hover:bg-[#EF4444] text-[#FAFAFA] shadow-md shadow-[#DC2626]/30 hover:shadow-lg hover:shadow-[#EF4444]/40 hover:-translate-y-0.5',
       secondary:
-        'bg-zinc-200 hover:bg-zinc-300/80 text-zinc-900 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 active:scale-[0.98]',
+        'bg-[#171717] hover:bg-[#202020] text-[#FAFAFA] border border-[#292929] hover:border-[#DC2626]/50 hover:shadow-xs hover:-translate-y-0.5',
       outline:
-        'border border-zinc-200 hover:bg-zinc-100 text-zinc-800 dark:border-zinc-800 dark:hover:bg-zinc-800/60 dark:text-zinc-200 active:scale-[0.98]',
+        'border border-[#292929] hover:border-[#DC2626] hover:bg-[#171717] text-[#FAFAFA] hover:shadow-[0_0_15px_rgba(220,38,38,0.25)] hover:-translate-y-0.5',
       ghost:
-        'hover:bg-zinc-100 dark:hover:bg-zinc-800/70 text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-200',
+        'hover:bg-[#171717] text-[#A3A3A3] hover:text-[#FAFAFA] hover:scale-[1.02]',
       danger:
-        'bg-rose-600 hover:bg-rose-500 text-white shadow-sm shadow-rose-600/30 active:scale-[0.98]',
+        'bg-[#991B1B] hover:bg-[#DC2626] text-[#FAFAFA] shadow-md shadow-[#991B1B]/40 hover:shadow-lg hover:shadow-[#DC2626]/40 hover:-translate-y-0.5',
       subtle:
-        'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/50 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/40',
+        'bg-[#DC2626]/15 hover:bg-[#DC2626]/25 text-[#EF4444] border border-[#DC2626]/30 hover:shadow-xs hover:-translate-y-0.5',
     };
 
     const sizes: Record<string, string> = {

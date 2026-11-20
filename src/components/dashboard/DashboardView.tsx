@@ -89,35 +89,40 @@ export const DashboardView: React.FC = () => {
 
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-200">
-      {/* Top Banner: Greeting, Date, & Quote */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 rounded-3xl border border-zinc-200/80 bg-gradient-to-r from-zinc-50 via-white to-indigo-50/30 p-6 shadow-xs dark:border-zinc-800/80 dark:from-zinc-900/90 dark:via-zinc-900/60 dark:to-indigo-950/20">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-            <Sparkles className="w-3.5 h-3.5" />
+      {/* Top Banner: Hero Section with BLACK background, WHITE large heading, RED highlighted word, GRAY description, RED glow */}
+      <div className="relative overflow-hidden rounded-3xl border border-[#292929] bg-[#111111] p-6 shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        {/* Subtle Luxury Red Glow Ambient Backdrops */}
+        <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-[#DC2626]/15 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 right-0 w-80 h-80 rounded-full bg-[#7F1D1D]/20 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#EF4444]">
+            <Sparkles className="w-3.5 h-3.5 text-[#EF4444]" />
             <span>{format(now, 'EEEE, MMMM d, yyyy')}</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-ping" />
           </div>
-          <h2 className="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-            {greeting}, {settings.userName || 'Kaushal'}
+          <h2 className="mt-1 text-2xl sm:text-3xl font-black tracking-tight text-[#FAFAFA]">
+            {greeting}, <span className="text-red-gradient drop-shadow-[0_0_15px_rgba(220,38,38,0.4)]">{settings.userName || 'Kaushal'}</span>
           </h2>
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            You have <span className="font-semibold text-zinc-800 dark:text-zinc-200">{dueTodayPending} tasks</span> due today and{' '}
-            <span className="font-semibold text-zinc-800 dark:text-zinc-200">{todayHabitsDone} habits</span> checked off.
+          <p className="mt-1 text-xs text-[#A3A3A3]">
+            You have <span className="font-bold text-[#EF4444] px-2 py-0.5 rounded-md bg-[#DC2626]/10 border border-[#DC2626]/30 shadow-[0_0_8px_rgba(220,38,38,0.2)]">{dueTodayPending} tasks</span> due today and{' '}
+            <span className="font-bold text-[#FAFAFA] px-2 py-0.5 rounded-md bg-[#171717] border border-[#292929]">{todayHabitsDone} habits</span> checked off.
           </p>
         </div>
 
         {/* Motivational quote card */}
-        <div className="relative max-w-md rounded-2xl border border-zinc-200/60 bg-white/70 p-3.5 backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
+        <div className="relative z-10 max-w-md rounded-2xl border border-[#292929] bg-[#171717]/90 p-4 backdrop-blur-md hover:border-[#DC2626]/60 hover:shadow-[0_0_20px_rgba(220,38,38,0.3)] transition-all duration-200">
           <button
             onClick={rotateQuote}
             title="Next quote"
-            className="absolute right-2.5 top-2.5 p-1 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+            className="absolute right-2.5 top-2.5 p-1.5 rounded-lg text-[#A3A3A3] hover:text-[#EF4444] hover:bg-[#202020] transition-all duration-150 cursor-pointer hover:rotate-180 active:scale-90"
           >
-            <RotateCcw className="w-3 h-3" />
+            <RotateCcw className="w-3.5 h-3.5" />
           </button>
-          <p className="text-xs italic text-zinc-600 dark:text-zinc-300 pr-5 leading-relaxed">
+          <p className="text-xs italic text-[#FAFAFA] pr-5 leading-relaxed">
             &ldquo;{currentQuote.text}&rdquo;
           </p>
-          <span className="mt-1 block text-[10px] font-medium text-zinc-400">
+          <span className="mt-1 block text-[10px] font-semibold text-[#A3A3A3]">
             — {currentQuote.author}
           </span>
         </div>

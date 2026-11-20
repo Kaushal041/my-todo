@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#09090b',
+  themeColor: '#080808',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -66,7 +66,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="h-full bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans">
+      <body className="h-full bg-[#080808] text-[#FAFAFA] flex flex-col font-sans">
         <AppProvider>{children}</AppProvider>
       </body>
     </html>

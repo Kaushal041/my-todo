@@ -104,7 +104,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<UserSettings>(storage.getSettings());
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
 
-  const [activeView, setActiveView] = useState<ActiveView>('dashboard');
+  const [activeView, setActiveViewState] = useState<ActiveView>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
@@ -113,6 +113,74 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [toast, setToast] = useState<ToastItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Set active view with browser URL history push
+  const setActiveView = useCallback((view: ActiveView, pushToHistory = true) => {
+    setActiveViewState(view);
+    if (typeof window !== 'undefined' && pushToHistory) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', view);
+      window.history.pushState({ view }, '', url.toString());
+    }
+  }, []);
+
+  // Listen to browser Back / Forward buttons (popstate)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Read initial view from URL if present
+    const params = new URLSearchParams(window.location.search);
+    const initialView = params.get('view') as ActiveView | null;
+    const validViews: ActiveView[] = [
+      'dashboard', 'my-day', 'upcoming', 'inbox', 'all-tasks',
+      'kanban', 'calendar', 'important', 'overdue', 'completed',
+      'trash', 'pomodoro', 'habits', 'journal', 'analytics', 'settings'
+    ];
+
+    if (initialView && validViews.includes(initialView)) {
+      setActiveViewState(initialView);
+    } else {
+      // Set initial history state
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', 'dashboard');
+      window.history.replaceState({ view: 'dashboard' }, '', url.toString());
+    }
+
+    const handlePopState = (event: PopStateEvent) => {
+      // If modal or palette is open, close them first
+      if (isTaskModalOpen) {
+        setIsTaskModalOpen(false);
+        return;
+      }
+      if (isCommandPaletteOpen) {
+        setIsCommandPaletteOpen(false);
+        return;
+      }
+      if (isAiModalOpen) {
+        setIsAiModalOpen(false);
+        return;
+      }
+      if (isShortcutsOpen) {
+        setIsShortcutsOpen(false);
+        return;
+      }
+
+      if (event.state?.view && validViews.includes(event.state.view)) {
+        setActiveViewState(event.state.view);
+      } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const viewFromUrl = urlParams.get('view') as ActiveView | null;
+        if (viewFromUrl && validViews.includes(viewFromUrl)) {
+          setActiveViewState(viewFromUrl);
+        } else {
+          setActiveViewState('dashboard');
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [isTaskModalOpen, isCommandPaletteOpen, isAiModalOpen, isShortcutsOpen]);
 
   // Initialize from storage on mount
   useEffect(() => {

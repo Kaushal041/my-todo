@@ -58,13 +58,13 @@ export const CalendarView: React.FC = () => {
           <div className="flex items-center gap-1">
             <button
               onClick={prevMonth}
-              className="p-1.5 rounded-lg border border-zinc-200 hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition-colors"
+              className="p-1.5 rounded-lg border border-zinc-200 hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={nextMonth}
-              className="p-1.5 rounded-lg border border-zinc-200 hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition-colors"
+              className="p-1.5 rounded-lg border border-zinc-200 hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -74,17 +74,17 @@ export const CalendarView: React.FC = () => {
             {format(currentDate, 'MMMM yyyy')}
           </h3>
 
-          <Button variant="outline" size="sm" onClick={goToToday} className="h-8 text-xs">
+          <Button variant="outline" size="sm" onClick={goToToday} className="h-8 text-xs cursor-pointer">
             Today
           </Button>
         </div>
 
         <div className="flex items-center gap-2">
           {/* View mode toggle */}
-          <div className="flex items-center rounded-xl bg-zinc-100 p-0.5 dark:bg-zinc-800">
+          <div className="flex items-center rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
             <button
               onClick={() => setCalendarMode('month')}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 ${
                 calendarMode === 'month'
                   ? 'bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white'
                   : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -94,7 +94,7 @@ export const CalendarView: React.FC = () => {
             </button>
             <button
               onClick={() => setCalendarMode('week')}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 ${
                 calendarMode === 'week'
                   ? 'bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white'
                   : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'

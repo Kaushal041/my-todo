@@ -95,13 +95,13 @@ export const JournalNotes: React.FC = () => {
               <button
                 key={m.key}
                 onClick={() => setMood(m.key)}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-medium transition-all ${
+                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 ${
                   mood === m.key
-                    ? 'bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white'
+                    ? 'bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white font-semibold'
                     : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
                 }`}
               >
-                <span>{m.emoji}</span>
+                <span className="text-sm">{m.emoji}</span>
                 <span className="hidden sm:inline">{m.label}</span>
               </button>
             ))}

@@ -112,10 +112,10 @@ export const AnalyticsView: React.FC = () => {
     <div className="space-y-6 pb-12 animate-in fade-in duration-200">
       {/* Top Filter and Export Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl border border-zinc-200/80 bg-white dark:border-zinc-800/80 dark:bg-zinc-900/90 shadow-2xs">
-        <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-xl">
+        <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl">
           <button
             onClick={() => setDateRange('7d')}
-            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 ${
               dateRange === '7d'
                 ? 'bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white'
                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -125,7 +125,7 @@ export const AnalyticsView: React.FC = () => {
           </button>
           <button
             onClick={() => setDateRange('30d')}
-            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 ${
               dateRange === '30d'
                 ? 'bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white'
                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
@@ -135,7 +135,7 @@ export const AnalyticsView: React.FC = () => {
           </button>
           <button
             onClick={() => setDateRange('all')}
-            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 ${
               dateRange === 'all'
                 ? 'bg-white text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-white'
                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'

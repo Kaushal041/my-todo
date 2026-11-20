@@ -160,10 +160,10 @@ export const HabitTracker: React.FC = () => {
                           <button
                             key={dateStr}
                             onClick={() => toggleHabitDate(habit.id, dateStr)}
-                            className={`h-7 w-7 mx-auto rounded-lg flex items-center justify-center transition-all ${
+                            className={`h-7 w-7 mx-auto rounded-lg flex items-center justify-center transition-all duration-150 cursor-pointer hover:scale-110 active:scale-90 ${
                               isDone
                                 ? 'text-white shadow-xs'
-                                : 'border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 bg-white dark:bg-zinc-900'
+                                : 'border border-zinc-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-indigo-600 bg-white dark:bg-zinc-900'
                             }`}
                             style={{
                               backgroundColor: isDone ? habit.color || '#6366f1' : undefined,

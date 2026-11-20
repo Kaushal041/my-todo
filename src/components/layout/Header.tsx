@@ -12,6 +12,8 @@ import {
   VolumeX,
   Sparkles,
   Command,
+  ArrowLeft,
+  ArrowRight,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -79,21 +81,43 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-zinc-200/80 bg-white/80 px-4 md:px-8 backdrop-blur-md dark:border-zinc-800/80 dark:bg-zinc-950/80 transition-colors">
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[#292929] bg-[#080808]/90 px-4 md:px-8 backdrop-blur-md transition-colors">
       <div className="flex items-center gap-3">
+        {/* Navigation History Back / Forward Controls */}
+        <div className="flex items-center gap-1 mr-1">
+          <button
+            onClick={() => {
+              if (typeof window !== 'undefined') window.history.back();
+            }}
+            title="Go back (Browser Back)"
+            className="p-1.5 rounded-xl border border-[#292929] bg-[#171717] hover:bg-[#DC2626]/15 hover:text-[#EF4444] hover:border-[#DC2626] text-[#A3A3A3] transition-all duration-150 cursor-pointer hover:scale-110 active:scale-90 shadow-2xs"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => {
+              if (typeof window !== 'undefined') window.history.forward();
+            }}
+            title="Go forward (Browser Forward)"
+            className="p-1.5 rounded-xl border border-[#292929] bg-[#171717] hover:bg-[#DC2626]/15 hover:text-[#EF4444] hover:border-[#DC2626] text-[#A3A3A3] transition-all duration-150 cursor-pointer hover:scale-110 active:scale-90 shadow-2xs"
+          >
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+
         {/* Mobile menu button */}
         <button
           onClick={onToggleMobileSidebar}
-          className="rounded-lg p-2 text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800 md:hidden"
+          className="rounded-xl p-2 text-[#A3A3A3] hover:bg-[#171717] md:hidden cursor-pointer transition-transform active:scale-95"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         <div>
-          <h1 className="text-base md:text-lg font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-2">
+          <h1 className="text-base md:text-lg font-black tracking-tight text-[#FAFAFA] flex items-center gap-2">
             {currentViewInfo.title}
           </h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 hidden sm:block">
+          <p className="text-xs text-[#A3A3A3] hidden sm:block">
             {currentViewInfo.subtitle}
           </p>
         </div>
@@ -102,24 +126,24 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
       <div className="flex items-center gap-2 md:gap-3">
         {/* Search bar */}
         <div className="relative hidden lg:block w-64">
-          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#A3A3A3]" />
           <input
             type="text"
             placeholder="Filter tasks..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-xl border border-zinc-200 bg-zinc-100/70 pl-8 pr-3 py-1.5 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-indigo-500 focus:bg-white focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-indigo-500 transition-all"
+            className="w-full rounded-xl border border-[#292929] bg-[#171717] pl-8 pr-3 py-1.5 text-xs text-[#FAFAFA] placeholder:text-[#A3A3A3] focus:border-[#DC2626] focus:ring-1 focus:ring-[#DC2626]/50 focus:outline-none transition-all"
           />
         </div>
 
         {/* Command palette button */}
         <button
           onClick={() => setIsCommandPaletteOpen(true)}
-          className="flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors"
+          className="flex items-center gap-1.5 rounded-xl border border-[#292929] bg-[#171717] px-2.5 py-1.5 text-xs font-semibold text-[#FAFAFA] hover:border-[#DC2626] hover:bg-[#202020] transition-all duration-150 cursor-pointer hover:shadow-2xs hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
         >
-          <Command className="w-3.5 h-3.5 text-zinc-400" />
+          <Command className="w-3.5 h-3.5 text-[#EF4444]" />
           <span className="hidden sm:inline">Search</span>
-          <kbd className="rounded bg-zinc-200 px-1 py-0.5 text-[10px] font-mono text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+          <kbd className="rounded bg-[#080808] px-1 py-0.5 text-[10px] font-mono text-[#A3A3A3] border border-[#292929]">
             Ctrl+K
           </kbd>
         </button>
@@ -128,14 +152,14 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         <button
           onClick={() => setIsAiModalOpen(true)}
           title="Smart AI Breakdown"
-          className="flex items-center gap-1.5 rounded-xl border border-indigo-200/80 bg-indigo-50/80 px-2.5 py-1.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-100/90 dark:border-indigo-900/60 dark:bg-indigo-950/40 dark:text-indigo-300 dark:hover:bg-indigo-900/50 transition-colors shadow-xs"
+          className="flex items-center gap-1.5 rounded-xl border border-[#DC2626]/60 bg-[#DC2626]/15 px-2.5 py-1.5 text-xs font-bold text-[#FAFAFA] hover:bg-[#DC2626]/25 hover:border-[#DC2626] transition-all duration-150 shadow-[0_0_15px_rgba(220,38,38,0.25)] cursor-pointer hover:shadow-lg hover:shadow-[#DC2626]/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
         >
-          <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+          <Sparkles className="w-3.5 h-3.5 text-[#EF4444]" />
           <span className="hidden md:inline">AI Planner</span>
         </button>
 
         {/* Live Clock */}
-        <div className="hidden xl:flex items-center px-2.5 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/60 text-xs font-mono text-zinc-600 dark:text-zinc-400">
+        <div className="hidden xl:flex items-center px-2.5 py-1 rounded-xl bg-[#171717] border border-[#292929] text-xs font-mono text-[#A3A3A3]">
           {currentTime || '00:00:00'}
         </div>
 
@@ -143,21 +167,21 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         <button
           onClick={toggleSound}
           title={settings.soundEffects ? 'Sound Enabled' : 'Sound Muted'}
-          className="rounded-xl border border-zinc-200 p-2 text-zinc-500 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition-colors"
+          className="rounded-xl border border-[#292929] bg-[#171717] p-2 text-[#A3A3A3] hover:text-[#FAFAFA] hover:border-[#DC2626] transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
         >
-          {settings.soundEffects ? <Volume2 className="w-4 h-4 text-indigo-500" /> : <VolumeX className="w-4 h-4 text-zinc-400" />}
+          {settings.soundEffects ? <Volume2 className="w-4 h-4 text-[#EF4444]" /> : <VolumeX className="w-4 h-4 text-[#A3A3A3]" />}
         </button>
 
         {/* Theme toggle */}
         <button
           onClick={toggleTheme}
           title={settings.theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          className="rounded-xl border border-zinc-200 p-2 text-zinc-500 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition-colors"
+          className="rounded-xl border border-[#292929] bg-[#171717] p-2 text-[#A3A3A3] hover:text-[#EF4444] hover:border-[#DC2626] transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 shadow-2xs"
         >
           {settings.theme === 'dark' ? (
-            <Sun className="w-4 h-4 text-amber-400 transition-transform hover:rotate-45" />
+            <Sun className="w-4 h-4 text-[#EF4444] transition-transform hover:rotate-45" />
           ) : (
-            <Moon className="w-4 h-4 text-indigo-600 transition-transform hover:-rotate-12" />
+            <Moon className="w-4 h-4 text-[#DC2626] transition-transform hover:-rotate-12" />
           )}
         </button>
       </div>
