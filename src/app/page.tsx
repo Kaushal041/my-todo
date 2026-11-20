@@ -76,7 +76,11 @@ export default function Home() {
       </div>
 
       {/* Mobile Bottom Navigation Bar (Phone-optimized) */}
-      <MobileBottomNav onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)} />
+      <MobileBottomNav
+        isMobileSidebarOpen={isMobileSidebarOpen}
+        onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
+        onCloseMobileSidebar={() => setIsMobileSidebarOpen(false)}
+      />
 
       {/* Global Modals & Notifications */}
       <TaskDetailModal />

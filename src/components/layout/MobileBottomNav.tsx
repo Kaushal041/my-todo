@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useApp } from '@/context/AppContext';
-import { ActiveView } from '@/types';
 import { cn } from '@/lib/utils';
 import {
   LayoutDashboard,
@@ -14,11 +13,15 @@ import {
 import { format } from 'date-fns';
 
 interface MobileBottomNavProps {
-  onOpenMobileSidebar: () => void;
+  isMobileSidebarOpen: boolean;
+  onToggleMobileSidebar: () => void;
+  onCloseMobileSidebar: () => void;
 }
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
-  onOpenMobileSidebar,
+  isMobileSidebarOpen,
+  onToggleMobileSidebar,
+  onCloseMobileSidebar,
 }) => {
   const { activeView, setActiveView, tasks, openCreateTaskModal } = useApp();
 
@@ -27,16 +30,19 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     (t) => !t.inTrash && t.status !== 'completed' && t.dueDate === todayStr
   ).length;
 
-  const isHomeActive = activeView === 'dashboard';
+  // Active status considering whether the Mobile Sidebar Menu is open
+  const isMenuActive = isMobileSidebarOpen;
+  const isHomeActive = !isMobileSidebarOpen && activeView === 'dashboard';
   const isTasksActive =
-    activeView === 'my-day' ||
-    activeView === 'all-tasks' ||
-    activeView === 'upcoming' ||
-    activeView === 'inbox' ||
-    activeView === 'important' ||
-    activeView === 'overdue' ||
-    activeView === 'completed';
-  const isKanbanActive = activeView === 'kanban';
+    !isMobileSidebarOpen &&
+    (activeView === 'my-day' ||
+      activeView === 'all-tasks' ||
+      activeView === 'upcoming' ||
+      activeView === 'inbox' ||
+      activeView === 'important' ||
+      activeView === 'overdue' ||
+      activeView === 'completed');
+  const isKanbanActive = !isMobileSidebarOpen && activeView === 'kanban';
 
   return (
     <nav
@@ -47,7 +53,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         {/* 1. Home / Dashboard */}
         <button
           type="button"
-          onClick={() => setActiveView('dashboard')}
+          onClick={() => {
+            setActiveView('dashboard');
+            onCloseMobileSidebar();
+          }}
           className={cn(
             'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none active:scale-95',
             isHomeActive
@@ -67,7 +76,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         {/* 2. Tasks / My Day */}
         <button
           type="button"
-          onClick={() => setActiveView('my-day')}
+          onClick={() => {
+            setActiveView('my-day');
+            onCloseMobileSidebar();
+          }}
           className={cn(
             'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none active:scale-95 relative',
             isTasksActive
@@ -93,7 +105,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         <div className="relative -top-4 flex items-center justify-center">
           <button
             type="button"
-            onClick={() => openCreateTaskModal()}
+            onClick={() => {
+              openCreateTaskModal();
+              onCloseMobileSidebar();
+            }}
             title="Create New Task"
             className="w-13 h-13 rounded-full bg-red-gradient text-white flex items-center justify-center shadow-lg shadow-[#DC2626]/40 border-2 border-[#EF4444]/60 transition-transform active:scale-90 hover:scale-105 cursor-pointer ring-4 ring-white dark:ring-[#080808]"
           >
@@ -104,7 +119,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         {/* 4. Kanban Board */}
         <button
           type="button"
-          onClick={() => setActiveView('kanban')}
+          onClick={() => {
+            setActiveView('kanban');
+            onCloseMobileSidebar();
+          }}
           className={cn(
             'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none active:scale-95',
             isKanbanActive
@@ -121,13 +139,23 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           <span className="text-[10px] font-bold tracking-tight">Board</span>
         </button>
 
-        {/* 5. Menu / All Views */}
+        {/* 5. Menu / All Views (Toggleable) */}
         <button
           type="button"
-          onClick={onOpenMobileSidebar}
-          className="flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-xl text-zinc-500 dark:text-[#A3A3A3] hover:text-zinc-900 dark:hover:text-[#FAFAFA] transition-all cursor-pointer select-none active:scale-95"
+          onClick={onToggleMobileSidebar}
+          className={cn(
+            'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none active:scale-95',
+            isMenuActive
+              ? 'text-[#DC2626] dark:text-[#EF4444]'
+              : 'text-zinc-500 dark:text-[#A3A3A3] hover:text-zinc-900 dark:hover:text-[#FAFAFA]'
+          )}
         >
-          <Menu className="w-5 h-5" />
+          <div className="relative">
+            <Menu className="w-5 h-5" />
+            {isMenuActive && (
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#DC2626] dark:bg-[#EF4444]" />
+            )}
+          </div>
           <span className="text-[10px] font-bold tracking-tight">Menu</span>
         </button>
       </div>

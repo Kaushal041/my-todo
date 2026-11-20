@@ -113,7 +113,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
 
       <aside
         className={cn(
-          'fixed md:static inset-y-0 left-0 z-40 w-64 shrink-0 flex flex-col justify-between border-r border-zinc-200 dark:border-[#292929] bg-white dark:bg-[#080808] p-4 transition-transform duration-200 ease-in-out shadow-2xl md:shadow-none',
+          'fixed md:static inset-y-0 left-0 z-40 w-64 shrink-0 flex flex-col justify-between border-r border-zinc-200 dark:border-[#292929] bg-white dark:bg-[#080808] p-4 pb-24 md:pb-4 transition-transform duration-200 ease-in-out shadow-2xl md:shadow-none',
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         )}
       >

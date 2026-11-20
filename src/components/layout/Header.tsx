@@ -12,8 +12,6 @@ import {
   VolumeX,
   Sparkles,
   Command,
-  ArrowLeft,
-  ArrowRight,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -82,29 +80,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
 
   return (
     <header className="sticky top-0 z-30 flex h-14 sm:h-16 w-full items-center justify-between border-b border-zinc-200 dark:border-[#292929] bg-white/90 dark:bg-[#080808]/90 px-3 sm:px-4 md:px-8 backdrop-blur-md transition-colors">
-      <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
-        {/* Navigation History Back / Forward Controls */}
-        <div className="flex items-center gap-1 mr-0.5 sm:mr-1">
-          <button
-            onClick={() => {
-              if (typeof window !== 'undefined') window.history.back();
-            }}
-            title="Go back (Browser Back)"
-            className="p-1.5 rounded-xl border border-zinc-200 dark:border-[#292929] bg-white dark:bg-[#171717] hover:bg-[#DC2626]/10 dark:hover:bg-[#DC2626]/15 hover:text-[#DC2626] dark:hover:text-[#EF4444] hover:border-[#DC2626] text-zinc-600 dark:text-[#A3A3A3] transition-all duration-150 cursor-pointer hover:scale-110 active:scale-90 shadow-2xs"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </button>
-          <button
-            onClick={() => {
-              if (typeof window !== 'undefined') window.history.forward();
-            }}
-            title="Go forward (Browser Forward)"
-            className="p-1.5 rounded-xl border border-zinc-200 dark:border-[#292929] bg-white dark:bg-[#171717] hover:bg-[#DC2626]/10 dark:hover:bg-[#DC2626]/15 hover:text-[#DC2626] dark:hover:text-[#EF4444] hover:border-[#DC2626] text-zinc-600 dark:text-[#A3A3A3] transition-all duration-150 cursor-pointer hover:scale-110 active:scale-90 shadow-2xs hidden xs:inline-flex"
-          >
-            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </button>
-        </div>
-
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         {/* Mobile menu button */}
         <button
           onClick={onToggleMobileSidebar}
