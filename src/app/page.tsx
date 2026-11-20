@@ -59,7 +59,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#080808] font-sans selection:bg-[#DC2626]/30 selection:text-[#FAFAFA] text-[#FAFAFA]">
+    <div className="flex h-screen w-full overflow-hidden bg-[#FAFAFA] dark:bg-[#080808] font-sans selection:bg-[#DC2626]/20 selection:text-[#DC2626] dark:selection:bg-[#DC2626]/30 dark:selection:text-[#FAFAFA] text-zinc-900 dark:text-[#FAFAFA] transition-colors duration-200">
       {/* Sidebar Navigation */}
       <Sidebar
         isOpen={isMobileSidebarOpen}
@@ -67,10 +67,10 @@ export default function Home() {
       />
 
       {/* Main Content Area */}
-      <div className="flex flex-1 flex-col overflow-hidden bg-[#080808]">
+      <div className="flex flex-1 flex-col overflow-hidden bg-[#FAFAFA] dark:bg-[#080808]">
         <Header onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)} />
 
-        <main className="flex-1 overflow-y-auto px-3 sm:px-6 md:px-8 pt-4 sm:pt-6 pb-24 md:pb-6 bg-[#080808]">
+        <main className="flex-1 overflow-y-auto px-3 sm:px-6 md:px-8 pt-4 sm:pt-6 pb-24 md:pb-6 bg-[#FAFAFA] dark:bg-[#080808]">
           <div className="max-w-6xl mx-auto">{renderActiveView()}</div>
         </main>
       </div>

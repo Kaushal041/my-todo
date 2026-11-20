@@ -14,15 +14,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       primary:
         'bg-[#DC2626] hover:bg-[#EF4444] text-[#FAFAFA] shadow-md shadow-[#DC2626]/30 hover:shadow-lg hover:shadow-[#EF4444]/40 hover:-translate-y-0.5',
       secondary:
-        'bg-[#171717] hover:bg-[#202020] text-[#FAFAFA] border border-[#292929] hover:border-[#DC2626]/50 hover:shadow-xs hover:-translate-y-0.5',
+        'bg-zinc-100 hover:bg-zinc-200 text-zinc-900 border border-zinc-200 dark:bg-[#171717] dark:hover:bg-[#202020] dark:text-[#FAFAFA] dark:border-[#292929] hover:border-[#DC2626]/50 hover:shadow-xs hover:-translate-y-0.5',
       outline:
-        'border border-[#292929] hover:border-[#DC2626] hover:bg-[#171717] text-[#FAFAFA] hover:shadow-[0_0_15px_rgba(220,38,38,0.25)] hover:-translate-y-0.5',
+        'border border-zinc-200 hover:border-[#DC2626] hover:bg-zinc-50 text-zinc-800 dark:border-[#292929] dark:hover:border-[#DC2626] dark:hover:bg-[#171717] dark:text-[#FAFAFA] hover:shadow-xs dark:hover:shadow-[0_0_15px_rgba(220,38,38,0.25)] hover:-translate-y-0.5',
       ghost:
-        'hover:bg-[#171717] text-[#A3A3A3] hover:text-[#FAFAFA] hover:scale-[1.02]',
+        'hover:bg-zinc-100 text-zinc-600 hover:text-zinc-900 dark:hover:bg-[#171717] dark:text-[#A3A3A3] dark:hover:text-[#FAFAFA] hover:scale-[1.02]',
       danger:
-        'bg-[#991B1B] hover:bg-[#DC2626] text-[#FAFAFA] shadow-md shadow-[#991B1B]/40 hover:shadow-lg hover:shadow-[#DC2626]/40 hover:-translate-y-0.5',
+        'bg-[#DC2626] hover:bg-[#EF4444] text-white shadow-md shadow-[#DC2626]/30 hover:shadow-lg hover:shadow-[#EF4444]/40 hover:-translate-y-0.5',
       subtle:
-        'bg-[#DC2626]/15 hover:bg-[#DC2626]/25 text-[#EF4444] border border-[#DC2626]/30 hover:shadow-xs hover:-translate-y-0.5',
+        'bg-[#DC2626]/10 hover:bg-[#DC2626]/20 text-[#DC2626] border border-[#DC2626]/20 dark:bg-[#DC2626]/15 dark:hover:bg-[#DC2626]/25 dark:text-[#EF4444] dark:border-[#DC2626]/30 hover:shadow-xs hover:-translate-y-0.5',
     };
 
     const sizes: Record<string, string> = {

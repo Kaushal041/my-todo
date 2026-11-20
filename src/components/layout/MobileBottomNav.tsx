@@ -41,7 +41,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   return (
     <nav
       aria-label="Mobile Navigation"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#080808]/95 backdrop-blur-xl border-t border-[#292929] px-3 pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-[0_-5px_25px_rgba(0,0,0,0.8)]"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#080808]/95 backdrop-blur-xl border-t border-zinc-200 dark:border-[#292929] px-3 pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-[0_-5px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_-5px_25px_rgba(0,0,0,0.8)]"
     >
       <div className="flex items-center justify-around max-w-md mx-auto">
         {/* 1. Home / Dashboard */}
@@ -51,14 +51,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           className={cn(
             'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none active:scale-95',
             isHomeActive
-              ? 'text-[#EF4444]'
-              : 'text-[#A3A3A3] hover:text-[#FAFAFA]'
+              ? 'text-[#DC2626] dark:text-[#EF4444]'
+              : 'text-zinc-500 dark:text-[#A3A3A3] hover:text-zinc-900 dark:hover:text-[#FAFAFA]'
           )}
         >
           <div className="relative">
             <LayoutDashboard className="w-5 h-5" />
             {isHomeActive && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#EF4444]" />
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#DC2626] dark:bg-[#EF4444]" />
             )}
           </div>
           <span className="text-[10px] font-bold tracking-tight">Home</span>
@@ -71,8 +71,8 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           className={cn(
             'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none active:scale-95 relative',
             isTasksActive
-              ? 'text-[#EF4444]'
-              : 'text-[#A3A3A3] hover:text-[#FAFAFA]'
+              ? 'text-[#DC2626] dark:text-[#EF4444]'
+              : 'text-zinc-500 dark:text-[#A3A3A3] hover:text-zinc-900 dark:hover:text-[#FAFAFA]'
           )}
         >
           <div className="relative">
@@ -83,7 +83,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               </span>
             )}
             {isTasksActive && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#EF4444]" />
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#DC2626] dark:bg-[#EF4444]" />
             )}
           </div>
           <span className="text-[10px] font-bold tracking-tight">Tasks</span>
@@ -95,7 +95,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             type="button"
             onClick={() => openCreateTaskModal()}
             title="Create New Task"
-            className="w-13 h-13 rounded-full bg-red-gradient text-white flex items-center justify-center shadow-lg shadow-[#DC2626]/40 border-2 border-[#EF4444]/60 transition-transform active:scale-90 hover:scale-105 cursor-pointer ring-4 ring-[#080808]"
+            className="w-13 h-13 rounded-full bg-red-gradient text-white flex items-center justify-center shadow-lg shadow-[#DC2626]/40 border-2 border-[#EF4444]/60 transition-transform active:scale-90 hover:scale-105 cursor-pointer ring-4 ring-white dark:ring-[#080808]"
           >
             <Plus className="w-6 h-6 stroke-[2.75]" />
           </button>
@@ -108,14 +108,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           className={cn(
             'flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-xl transition-all cursor-pointer select-none active:scale-95',
             isKanbanActive
-              ? 'text-[#EF4444]'
-              : 'text-[#A3A3A3] hover:text-[#FAFAFA]'
+              ? 'text-[#DC2626] dark:text-[#EF4444]'
+              : 'text-zinc-500 dark:text-[#A3A3A3] hover:text-zinc-900 dark:hover:text-[#FAFAFA]'
           )}
         >
           <div className="relative">
             <Kanban className="w-5 h-5" />
             {isKanbanActive && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#EF4444]" />
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#DC2626] dark:bg-[#EF4444]" />
             )}
           </div>
           <span className="text-[10px] font-bold tracking-tight">Board</span>
@@ -125,7 +125,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         <button
           type="button"
           onClick={onOpenMobileSidebar}
-          className="flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-xl text-[#A3A3A3] hover:text-[#FAFAFA] transition-all cursor-pointer select-none active:scale-95"
+          className="flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-xl text-zinc-500 dark:text-[#A3A3A3] hover:text-zinc-900 dark:hover:text-[#FAFAFA] transition-all cursor-pointer select-none active:scale-95"
         >
           <Menu className="w-5 h-5" />
           <span className="text-[10px] font-bold tracking-tight">Menu</span>

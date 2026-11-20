@@ -72,14 +72,14 @@ export const TaskItem: React.FC<TaskItemProps> = ({
     <div
       className={`group relative flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 p-3.5 rounded-xl border transition-all duration-200 select-none ${
         isCompleted
-          ? 'bg-[#171717]/60 border-[#292929]/60 opacity-70'
+          ? 'bg-zinc-100/70 dark:bg-[#171717]/60 border-zinc-200 dark:border-[#292929]/60 opacity-70'
           : task.inTrash
-          ? 'bg-[#991B1B]/15 border-[#DC2626]/40'
+          ? 'bg-rose-50 dark:bg-[#991B1B]/15 border-rose-200 dark:border-[#DC2626]/40'
           : isSelected
-          ? 'bg-[#DC2626]/15 border-[#DC2626] shadow-[0_0_15px_rgba(220,38,38,0.3)]'
+          ? 'bg-red-50 dark:bg-[#DC2626]/15 border-[#DC2626] shadow-2xs dark:shadow-[0_0_15px_rgba(220,38,38,0.3)]'
           : task.priority === 'urgent' || task.priority === 'high'
-          ? 'bg-[#171717] border-[#292929] hover:border-[#EF4444] hover:shadow-[0_0_22px_rgba(239,68,68,0.3)] hover:-translate-y-0.5'
-          : 'bg-[#171717] border-[#292929] hover:border-[#DC2626] hover:shadow-[0_0_18px_rgba(220,38,38,0.25)] hover:-translate-y-0.5'
+          ? 'bg-white dark:bg-[#171717] border-zinc-200 dark:border-[#292929] hover:border-[#EF4444] shadow-2xs dark:shadow-none hover:shadow-md dark:hover:shadow-[0_0_22px_rgba(239,68,68,0.3)] hover:-translate-y-0.5'
+          : 'bg-white dark:bg-[#171717] border-zinc-200 dark:border-[#292929] hover:border-[#DC2626] shadow-2xs dark:shadow-none hover:shadow-xs dark:hover:shadow-[0_0_18px_rgba(220,38,38,0.25)] hover:-translate-y-0.5'
       }`}
     >
       {/* Left section: Checkbox, Selection, Title & Badges */}
@@ -90,7 +90,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             type="checkbox"
             checked={isSelected}
             onChange={() => onToggleSelect(task.id)}
-            className="w-4 h-4 mt-0.5 sm:mt-0 rounded text-[#DC2626] focus:ring-[#DC2626]/30 border-[#292929] bg-[#111111] cursor-pointer shrink-0 transition-transform active:scale-90"
+            className="w-4 h-4 mt-0.5 sm:mt-0 rounded text-[#DC2626] focus:ring-[#DC2626]/30 border-zinc-300 dark:border-[#292929] bg-white dark:bg-[#111111] cursor-pointer shrink-0 transition-transform active:scale-90"
             title="Select for bulk action"
           />
         )}
@@ -103,7 +103,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             className={`w-6 h-6 sm:w-5 sm:h-5 mt-0.5 sm:mt-0 rounded-lg sm:rounded-md flex items-center justify-center transition-all duration-150 shrink-0 cursor-pointer hover:scale-110 active:scale-95 ${
               isCompleted
                 ? 'bg-[#DC2626] text-white shadow-xs'
-                : 'border border-[#292929] bg-[#111111] hover:border-[#DC2626] hover:bg-[#DC2626]/15'
+                : 'border border-zinc-300 dark:border-[#292929] bg-white dark:bg-[#111111] hover:border-[#DC2626] hover:bg-rose-50 dark:hover:bg-[#DC2626]/15'
             }`}
           >
             {isCompleted && <Check className="w-3.5 h-3.5 stroke-[2.5]" />}
@@ -123,8 +123,8 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             <span
               className={`text-sm font-semibold tracking-tight break-words transition-colors ${
                 isCompleted
-                  ? 'line-through text-[#A3A3A3]/60'
-                  : 'text-[#FAFAFA] group-hover:text-[#EF4444]'
+                  ? 'line-through text-zinc-400 dark:text-[#A3A3A3]/60'
+                  : 'text-zinc-900 dark:text-[#FAFAFA] group-hover:text-[#DC2626] dark:group-hover:text-[#EF4444]'
               }`}
             >
               {task.title}

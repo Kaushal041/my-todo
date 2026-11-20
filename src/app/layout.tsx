@@ -66,7 +66,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="h-full bg-[#080808] text-[#FAFAFA] flex flex-col font-sans">
+      <body className="h-full bg-[#FAFAFA] dark:bg-[#080808] text-zinc-900 dark:text-[#FAFAFA] flex flex-col font-sans transition-colors duration-200">
         <AppProvider>{children}</AppProvider>
       </body>
     </html>

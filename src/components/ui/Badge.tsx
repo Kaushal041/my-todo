@@ -18,10 +18,10 @@ export const Badge: React.FC<BadgeProps> = ({
 }) => {
   if (variant === 'priority' && priority) {
     const priorityStyles: Record<Priority, string> = {
-      urgent: 'bg-[#DC2626]/20 text-[#EF4444] border border-[#DC2626]/50 shadow-[0_0_12px_rgba(239,68,68,0.35)]',
-      high: 'bg-[#991B1B]/25 text-[#EF4444] border border-[#991B1B]/40 shadow-[0_0_8px_rgba(220,38,38,0.25)]',
-      medium: 'bg-[#DC2626]/10 text-[#FAFAFA] border border-[#DC2626]/30',
-      low: 'bg-[#171717] text-[#A3A3A3] border border-[#292929]',
+      urgent: 'bg-rose-50 text-rose-700 border-rose-300 dark:bg-[#DC2626]/20 dark:text-[#EF4444] dark:border-[#DC2626]/50 shadow-2xs dark:shadow-[0_0_12px_rgba(239,68,68,0.35)]',
+      high: 'bg-amber-50 text-amber-700 border-amber-300 dark:bg-[#991B1B]/25 dark:text-[#EF4444] dark:border-[#991B1B]/40 shadow-2xs dark:shadow-[0_0_8px_rgba(220,38,38,0.25)]',
+      medium: 'bg-zinc-100 text-zinc-700 border-zinc-200 dark:bg-[#DC2626]/10 dark:text-[#FAFAFA] dark:border-[#DC2626]/30',
+      low: 'bg-zinc-100 text-zinc-500 border-zinc-200 dark:bg-[#171717] dark:text-[#A3A3A3] dark:border-[#292929]',
     };
 
     return (
@@ -48,9 +48,9 @@ export const Badge: React.FC<BadgeProps> = ({
 
   if (variant === 'status' && status) {
     const statusStyles: Record<TaskStatus, { label: string; style: string }> = {
-      not_started: { label: 'To Do', style: 'bg-[#171717] text-[#A3A3A3] border border-[#292929]' },
-      in_progress: { label: 'In Progress', style: 'bg-[#DC2626]/15 text-[#EF4444] border border-[#DC2626]/40 shadow-[0_0_10px_rgba(220,38,38,0.25)]' },
-      completed: { label: 'Completed', style: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' },
+      not_started: { label: 'To Do', style: 'bg-zinc-100 text-zinc-600 border border-zinc-200 dark:bg-[#171717] dark:text-[#A3A3A3] dark:border-[#292929]' },
+      in_progress: { label: 'In Progress', style: 'bg-blue-50 text-blue-700 border border-blue-200 dark:bg-[#DC2626]/15 dark:text-[#EF4444] dark:border-[#DC2626]/40 dark:shadow-[0_0_10px_rgba(220,38,38,0.25)]' },
+      completed: { label: 'Completed', style: 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-400 dark:border-emerald-500/30' },
     };
 
     return (
@@ -70,7 +70,7 @@ export const Badge: React.FC<BadgeProps> = ({
   return (
     <span
       className={cn(
-        'inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-[#171717] text-[#FAFAFA] border border-[#292929]',
+        'inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-zinc-100 text-zinc-800 border border-zinc-200 dark:bg-[#171717] dark:text-[#FAFAFA] dark:border-[#292929]',
         className
       )}
       {...props}

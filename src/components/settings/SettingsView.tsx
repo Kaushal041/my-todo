@@ -143,7 +143,7 @@ export const SettingsView: React.FC = () => {
       {/* 1. Profile & Identity */}
       <div className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900/90">
         <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2 pb-3 border-b border-zinc-100 dark:border-zinc-800">
-          <User className="w-4 h-4 text-indigo-500" />
+          <User className="w-4 h-4 text-[#DC2626] dark:text-[#EF4444]" />
           Profile & Personalization
         </h3>
 
@@ -156,7 +156,7 @@ export const SettingsView: React.FC = () => {
               <Input
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
-                placeholder="Alex"
+                placeholder="Kaushal"
                 className="max-w-xs text-xs h-9"
               />
               <Button size="sm" variant="primary" onClick={handleSaveProfile} className="h-9 text-xs">
@@ -170,7 +170,7 @@ export const SettingsView: React.FC = () => {
       {/* 2. Theme & Appearance */}
       <div className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900/90">
         <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2 pb-3 border-b border-zinc-100 dark:border-zinc-800">
-          <Palette className="w-4 h-4 text-indigo-500" />
+          <Palette className="w-4 h-4 text-[#DC2626] dark:text-[#EF4444]" />
           Theme & Display
         </h3>
 
@@ -184,9 +184,9 @@ export const SettingsView: React.FC = () => {
                 <button
                   key={t}
                   onClick={() => updateSettings({ theme: t })}
-                  className={`py-2 px-3 rounded-xl text-xs font-semibold capitalize transition-all ${
+                  className={`py-2 px-3 rounded-xl text-xs font-semibold capitalize transition-all cursor-pointer ${
                     settings.theme === t
-                      ? 'bg-indigo-600 text-white shadow-xs'
+                      ? 'bg-[#DC2626] text-white shadow-xs'
                       : 'border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'
                   }`}
                 >
@@ -203,11 +203,11 @@ export const SettingsView: React.FC = () => {
               </label>
               <button
                 onClick={() => updateSettings({ soundEffects: !settings.soundEffects })}
-                className="flex items-center gap-2 text-xs font-medium text-zinc-700 dark:text-zinc-300"
+                className="flex items-center gap-2 text-xs font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer"
               >
                 <div
                   className={`w-9 h-5 rounded-full transition-colors relative ${
-                    settings.soundEffects ? 'bg-indigo-600' : 'bg-zinc-300 dark:bg-zinc-700'
+                    settings.soundEffects ? 'bg-[#DC2626]' : 'bg-zinc-300 dark:bg-zinc-700'
                   }`}
                 >
                   <span
@@ -241,7 +241,7 @@ export const SettingsView: React.FC = () => {
       <div className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900/90">
         <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
           <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
-            <Layers className="w-4 h-4 text-indigo-500" />
+            <Layers className="w-4 h-4 text-[#DC2626] dark:text-[#EF4444]" />
             <span>Work Fields & BI Tools</span>
           </h3>
           <span className="text-xs text-zinc-400 font-normal">Customizable directly from UI</span>
@@ -304,7 +304,7 @@ export const SettingsView: React.FC = () => {
       {/* 4. Pomodoro Durations */}
       <div className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900/90">
         <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2 pb-3 border-b border-zinc-100 dark:border-zinc-800">
-          <Clock className="w-4 h-4 text-indigo-500" />
+          <Clock className="w-4 h-4 text-[#DC2626] dark:text-[#EF4444]" />
           Focus & Pomodoro Durations (Minutes)
         </h3>
 
@@ -354,7 +354,7 @@ export const SettingsView: React.FC = () => {
       {/* 4. Data Backup, Restore & Reset */}
       <div className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900/90">
         <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2 pb-3 border-b border-zinc-100 dark:border-zinc-800">
-          <Download className="w-4 h-4 text-indigo-500" />
+          <Download className="w-4 h-4 text-[#DC2626] dark:text-[#EF4444]" />
           Data Management & Local Persistence
         </h3>
 
@@ -393,7 +393,7 @@ export const SettingsView: React.FC = () => {
               size="sm"
               variant="outline"
               onClick={loadSampleData}
-              className="text-xs gap-1.5 text-indigo-600 dark:text-indigo-400"
+              className="text-xs gap-1.5 text-zinc-600 dark:text-zinc-400 hover:text-[#DC2626]"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reload Sample Data</span>
@@ -420,7 +420,7 @@ export const SettingsView: React.FC = () => {
       <div className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900/90">
         <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
           <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
-            <Cloud className="w-4 h-4 text-indigo-500" />
+            <Cloud className="w-4 h-4 text-[#DC2626] dark:text-[#EF4444]" />
             Supabase Cloud Database Sync (Optional)
           </h3>
           <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 font-bold">
@@ -431,7 +431,7 @@ export const SettingsView: React.FC = () => {
         <div className="mt-4 space-y-3">
           <p className="text-xs text-zinc-400 leading-relaxed">
             Want multi-device sync with your own free Supabase PostgreSQL database? Run the schema in{' '}
-            <code className="text-indigo-600 dark:text-indigo-400 font-mono text-[11px]">
+            <code className="text-[#DC2626] dark:text-[#EF4444] font-mono text-[11px]">
               supabase/schema.sql
             </code>{' '}
             and enter your project endpoint and anon key below.
