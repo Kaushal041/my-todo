@@ -81,10 +81,10 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[#292929] bg-[#080808]/90 px-4 md:px-8 backdrop-blur-md transition-colors">
-      <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-30 flex h-14 sm:h-16 w-full items-center justify-between border-b border-[#292929] bg-[#080808]/90 px-3 sm:px-4 md:px-8 backdrop-blur-md transition-colors">
+      <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
         {/* Navigation History Back / Forward Controls */}
-        <div className="flex items-center gap-1 mr-1">
+        <div className="flex items-center gap-1 mr-0.5 sm:mr-1">
           <button
             onClick={() => {
               if (typeof window !== 'undefined') window.history.back();
@@ -92,38 +92,38 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
             title="Go back (Browser Back)"
             className="p-1.5 rounded-xl border border-[#292929] bg-[#171717] hover:bg-[#DC2626]/15 hover:text-[#EF4444] hover:border-[#DC2626] text-[#A3A3A3] transition-all duration-150 cursor-pointer hover:scale-110 active:scale-90 shadow-2xs"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <button
             onClick={() => {
               if (typeof window !== 'undefined') window.history.forward();
             }}
             title="Go forward (Browser Forward)"
-            className="p-1.5 rounded-xl border border-[#292929] bg-[#171717] hover:bg-[#DC2626]/15 hover:text-[#EF4444] hover:border-[#DC2626] text-[#A3A3A3] transition-all duration-150 cursor-pointer hover:scale-110 active:scale-90 shadow-2xs"
+            className="p-1.5 rounded-xl border border-[#292929] bg-[#171717] hover:bg-[#DC2626]/15 hover:text-[#EF4444] hover:border-[#DC2626] text-[#A3A3A3] transition-all duration-150 cursor-pointer hover:scale-110 active:scale-90 shadow-2xs hidden xs:inline-flex"
           >
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
 
         {/* Mobile menu button */}
         <button
           onClick={onToggleMobileSidebar}
-          className="rounded-xl p-2 text-[#A3A3A3] hover:bg-[#171717] md:hidden cursor-pointer transition-transform active:scale-95"
+          className="rounded-xl p-1.5 sm:p-2 text-[#A3A3A3] hover:bg-[#171717] md:hidden cursor-pointer transition-transform active:scale-95 shrink-0"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        <div>
-          <h1 className="text-base md:text-lg font-black tracking-tight text-[#FAFAFA] flex items-center gap-2">
+        <div className="min-w-0">
+          <h1 className="text-sm sm:text-base md:text-lg font-black tracking-tight text-[#FAFAFA] flex items-center gap-1.5 truncate">
             {currentViewInfo.title}
           </h1>
-          <p className="text-xs text-[#A3A3A3] hidden sm:block">
+          <p className="text-xs text-[#A3A3A3] hidden sm:block truncate">
             {currentViewInfo.subtitle}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-2 md:gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 shrink-0">
         {/* Search bar */}
         <div className="relative hidden lg:block w-64">
           <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#A3A3A3]" />
@@ -139,11 +139,12 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         {/* Command palette button */}
         <button
           onClick={() => setIsCommandPaletteOpen(true)}
-          className="flex items-center gap-1.5 rounded-xl border border-[#292929] bg-[#171717] px-2.5 py-1.5 text-xs font-semibold text-[#FAFAFA] hover:border-[#DC2626] hover:bg-[#202020] transition-all duration-150 cursor-pointer hover:shadow-2xs hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+          className="flex items-center gap-1.5 rounded-xl border border-[#292929] bg-[#171717] p-2 sm:px-2.5 sm:py-1.5 text-xs font-semibold text-[#FAFAFA] hover:border-[#DC2626] hover:bg-[#202020] transition-all duration-150 cursor-pointer hover:shadow-2xs active:scale-95"
+          title="Search & Quick Navigation (Ctrl+K)"
         >
-          <Command className="w-3.5 h-3.5 text-[#EF4444]" />
+          <Search className="w-3.5 h-3.5 text-[#EF4444]" />
           <span className="hidden sm:inline">Search</span>
-          <kbd className="rounded bg-[#080808] px-1 py-0.5 text-[10px] font-mono text-[#A3A3A3] border border-[#292929]">
+          <kbd className="hidden sm:inline-block rounded bg-[#080808] px-1 py-0.5 text-[10px] font-mono text-[#A3A3A3] border border-[#292929]">
             Ctrl+K
           </kbd>
         </button>
@@ -152,7 +153,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         <button
           onClick={() => setIsAiModalOpen(true)}
           title="Smart AI Breakdown"
-          className="flex items-center gap-1.5 rounded-xl border border-[#DC2626]/60 bg-[#DC2626]/15 px-2.5 py-1.5 text-xs font-bold text-[#FAFAFA] hover:bg-[#DC2626]/25 hover:border-[#DC2626] transition-all duration-150 shadow-[0_0_15px_rgba(220,38,38,0.25)] cursor-pointer hover:shadow-lg hover:shadow-[#DC2626]/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+          className="flex items-center gap-1.5 rounded-xl border border-[#DC2626]/60 bg-[#DC2626]/15 p-2 sm:px-2.5 sm:py-1.5 text-xs font-bold text-[#FAFAFA] hover:bg-[#DC2626]/25 hover:border-[#DC2626] transition-all duration-150 shadow-[0_0_15px_rgba(220,38,38,0.25)] cursor-pointer active:scale-95"
         >
           <Sparkles className="w-3.5 h-3.5 text-[#EF4444]" />
           <span className="hidden md:inline">AI Planner</span>
@@ -167,7 +168,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         <button
           onClick={toggleSound}
           title={settings.soundEffects ? 'Sound Enabled' : 'Sound Muted'}
-          className="rounded-xl border border-[#292929] bg-[#171717] p-2 text-[#A3A3A3] hover:text-[#FAFAFA] hover:border-[#DC2626] transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
+          className="rounded-xl border border-[#292929] bg-[#171717] p-1.5 sm:p-2 text-[#A3A3A3] hover:text-[#FAFAFA] hover:border-[#DC2626] transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
         >
           {settings.soundEffects ? <Volume2 className="w-4 h-4 text-[#EF4444]" /> : <VolumeX className="w-4 h-4 text-[#A3A3A3]" />}
         </button>
@@ -176,7 +177,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         <button
           onClick={toggleTheme}
           title={settings.theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          className="rounded-xl border border-[#292929] bg-[#171717] p-2 text-[#A3A3A3] hover:text-[#EF4444] hover:border-[#DC2626] transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 shadow-2xs"
+          className="rounded-xl border border-[#292929] bg-[#171717] p-1.5 sm:p-2 text-[#A3A3A3] hover:text-[#EF4444] hover:border-[#DC2626] transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95 shadow-2xs"
         >
           {settings.theme === 'dark' ? (
             <Sun className="w-4 h-4 text-[#EF4444] transition-transform hover:rotate-45" />

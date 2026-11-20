@@ -100,7 +100,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
           <button
             onClick={() => toggleTaskComplete(task.id)}
             title={isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
-            className={`w-5 h-5 mt-0.5 sm:mt-0 rounded-md flex items-center justify-center transition-all duration-150 shrink-0 cursor-pointer hover:scale-110 active:scale-95 ${
+            className={`w-6 h-6 sm:w-5 sm:h-5 mt-0.5 sm:mt-0 rounded-lg sm:rounded-md flex items-center justify-center transition-all duration-150 shrink-0 cursor-pointer hover:scale-110 active:scale-95 ${
               isCompleted
                 ? 'bg-[#DC2626] text-white shadow-xs'
                 : 'border border-[#292929] bg-[#111111] hover:border-[#DC2626] hover:bg-[#DC2626]/15'
@@ -109,7 +109,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             {isCompleted && <Check className="w-3.5 h-3.5 stroke-[2.5]" />}
           </button>
         ) : (
-          <div className="w-5 h-5 rounded-md flex items-center justify-center bg-[#991B1B]/20 text-[#EF4444] shrink-0">
+          <div className="w-6 h-6 sm:w-5 sm:h-5 rounded-lg sm:rounded-md flex items-center justify-center bg-[#991B1B]/20 text-[#EF4444] shrink-0">
             <Trash2 className="w-3.5 h-3.5" />
           </div>
         )}
@@ -211,7 +211,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
       </div>
 
       {/* Right section: Priority Badge & Explicit Actions */}
-      <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-zinc-100 dark:border-zinc-800">
+      <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100 dark:border-zinc-800">
         {!task.inTrash && (
           <div className="flex items-center gap-1.5">
             {/* 1-Click Code Merged Toggle Button */}
@@ -260,7 +260,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
                   setActiveView('pomodoro');
                 }}
                 title="Focus on this task with Pomodoro"
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-indigo-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-150 cursor-pointer hover:scale-110 active:scale-95"
+                className="p-2 sm:p-1.5 rounded-lg text-zinc-400 hover:text-indigo-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-150 cursor-pointer hover:scale-110 active:scale-95"
               >
                 <Timer className="w-3.5 h-3.5" />
               </button>
@@ -272,7 +272,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
                   duplicateTask(task.id);
                 }}
                 title="Duplicate task"
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-150 cursor-pointer hover:scale-110 active:scale-95"
+                className="p-2 sm:p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-150 cursor-pointer hover:scale-110 active:scale-95"
               >
                 <Copy className="w-3.5 h-3.5" />
               </button>
@@ -284,7 +284,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
                   deleteTask(task.id, false);
                 }}
                 title="Move to Recycle Bin (10-day retention)"
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-zinc-500 hover:text-rose-600 bg-zinc-100/70 hover:bg-rose-50 dark:bg-zinc-800/60 dark:hover:bg-rose-950/40 dark:text-zinc-400 dark:hover:text-rose-400 border border-zinc-200/50 dark:border-zinc-700/50 hover:border-rose-300 dark:hover:border-rose-900 transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
+                className="flex items-center gap-1 px-2.5 py-1.5 sm:py-1 rounded-lg text-xs font-medium text-zinc-500 hover:text-rose-600 bg-zinc-100/70 hover:bg-rose-50 dark:bg-zinc-800/60 dark:hover:bg-rose-950/40 dark:text-zinc-400 dark:hover:text-rose-400 border border-zinc-200/50 dark:border-zinc-700/50 hover:border-rose-300 dark:hover:border-rose-900 transition-all duration-150 cursor-pointer hover:scale-105 active:scale-95"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span className="text-[11px]">Delete</span>

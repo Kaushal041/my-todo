@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Header } from '@/components/layout/Header';
+import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { CommandPalette } from '@/components/layout/CommandPalette';
 import { ShortcutsModal } from '@/components/layout/ShortcutsModal';
 import { AiAssistantModal } from '@/components/smart/AiAssistantModal';
@@ -69,10 +70,13 @@ export default function Home() {
       <div className="flex flex-1 flex-col overflow-hidden bg-[#080808]">
         <Header onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)} />
 
-        <main className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-6 bg-[#080808]">
+        <main className="flex-1 overflow-y-auto px-3 sm:px-6 md:px-8 pt-4 sm:pt-6 pb-24 md:pb-6 bg-[#080808]">
           <div className="max-w-6xl mx-auto">{renderActiveView()}</div>
         </main>
       </div>
+
+      {/* Mobile Bottom Navigation Bar (Phone-optimized) */}
+      <MobileBottomNav onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)} />
 
       {/* Global Modals & Notifications */}
       <TaskDetailModal />

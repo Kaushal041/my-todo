@@ -242,7 +242,7 @@ export const TaskDetailModal: React.FC = () => {
         <div className="space-y-2.5 pt-1">
           {/* Due Date Shortcuts */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-semibold text-zinc-400 w-16 shrink-0">When:</span>
+            <span className="text-[11px] font-semibold text-zinc-400 w-full sm:w-16 shrink-0">When:</span>
             <button
               type="button"
               onClick={() => setDueDate(todayStr)}
@@ -297,7 +297,7 @@ export const TaskDetailModal: React.FC = () => {
 
           {/* Priority Shortcuts */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-semibold text-zinc-400 w-16 shrink-0">Priority:</span>
+            <span className="text-[11px] font-semibold text-zinc-400 w-full sm:w-16 shrink-0">Priority:</span>
             {(
               [
                 { p: 'medium', label: 'Normal' },
@@ -326,7 +326,7 @@ export const TaskDetailModal: React.FC = () => {
 
           {/* Field / Tool (Cognos, MicroStrategy, Tableau, etc.) */}
           <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800/80">
-            <span className="text-[11px] font-semibold text-zinc-400 w-16 shrink-0 flex items-center gap-1">
+            <span className="text-[11px] font-semibold text-zinc-400 w-full sm:w-16 shrink-0 flex items-center gap-1">
               <Layers className="w-3 h-3 text-indigo-500" />
               <span>Field:</span>
             </span>
@@ -412,7 +412,7 @@ export const TaskDetailModal: React.FC = () => {
 
           {/* Code Merged or Not */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-semibold text-zinc-400 w-16 shrink-0 flex items-center gap-1">
+            <span className="text-[11px] font-semibold text-zinc-400 w-full sm:w-16 shrink-0 flex items-center gap-1">
               <GitMerge className="w-3 h-3 text-emerald-500" />
               <span>Code:</span>
             </span>
@@ -446,7 +446,7 @@ export const TaskDetailModal: React.FC = () => {
 
           {/* Category Shortcuts */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-semibold text-zinc-400 w-16 shrink-0">Category:</span>
+            <span className="text-[11px] font-semibold text-zinc-400 w-full sm:w-16 shrink-0">Category:</span>
             {['Work', 'Personal', 'Projects'].map((cat) => (
               <button
                 key={cat}
@@ -591,7 +591,7 @@ export const TaskDetailModal: React.FC = () => {
         </div>
 
         {/* Modal Action Buttons */}
-        <div className="flex items-center justify-between pt-3 border-t border-zinc-100 dark:border-zinc-800">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-3 border-t border-zinc-100 dark:border-zinc-800">
           <div>
             {isEditing && selectedTask && (
               <Button
@@ -602,17 +602,23 @@ export const TaskDetailModal: React.FC = () => {
                   deleteTask(selectedTask.id);
                   closeTaskModal();
                 }}
-                className="gap-1.5 text-xs text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                className="w-full sm:w-auto gap-1.5 text-xs text-rose-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 h-9 sm:h-8"
                 title="Move to Recycle Bin (10-day retention)"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Delete</span>
+                <span>Delete Task</span>
               </Button>
             )}
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button type="button" variant="outline" size="sm" onClick={closeTaskModal} className="text-xs">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={closeTaskModal}
+              className="flex-1 sm:flex-initial text-xs h-9 sm:h-8"
+            >
               Cancel
             </Button>
             <Button
@@ -621,7 +627,7 @@ export const TaskDetailModal: React.FC = () => {
               size="sm"
               disabled={!title.trim()}
               onClick={handleSave}
-              className="text-xs px-4 font-semibold"
+              className="flex-1 sm:flex-initial text-xs px-4 font-semibold h-9 sm:h-8"
             >
               {isEditing ? 'Save Changes' : 'Create Task'}
             </Button>
