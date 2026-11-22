@@ -5,7 +5,7 @@ import { useApp } from '@/context/AppContext';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { exportFullBackupJSON } from '@/lib/export-csv';
-import { testSupabaseConnection } from '@/lib/supabase';
+import { storage, type AppDataSnapshot } from '@/lib/storage';
 import {
   User,
   Palette,
@@ -17,8 +17,6 @@ import {
   RotateCcw,
   Trash2,
   Cloud,
-  CheckCircle2,
-  AlertCircle,
   Sparkles,
   Layers,
   X,
@@ -28,6 +26,9 @@ export const SettingsView: React.FC = () => {
   const {
     settings,
     updateSettings,
+    cloudEnabled,
+    cloudSyncStatus,
+    syncCloudNow,
     tasks,
     habits,
     focusSessions,
@@ -51,15 +52,6 @@ export const SettingsView: React.FC = () => {
     addPlatform(newSettingPlatform.trim());
     setNewSettingPlatform('');
   };
-
-  // Supabase states
-  const [supabaseUrl, setSupabaseUrl] = useState(settings.supabaseSync?.url || '');
-  const [supabaseKey, setSupabaseKey] = useState(settings.supabaseSync?.anonKey || '');
-  const [supabaseTesting, setSupabaseTesting] = useState(false);
-  const [supabaseTestStatus, setSupabaseTestStatus] = useState<{
-    success?: boolean;
-    message?: string;
-  } | null>(null);
 
   const handleSaveProfile = () => {
     updateSettings({
@@ -90,17 +82,28 @@ export const SettingsView: React.FC = () => {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       try {
         const json = JSON.parse(event.target?.result as string);
         if (json.tasks && Array.isArray(json.tasks)) {
-          // Save to localStorage and notify
-          window.localStorage.setItem('zenith_tasks_v1', JSON.stringify(json.tasks));
-          if (json.habits) window.localStorage.setItem('zenith_habits_v1', JSON.stringify(json.habits));
-          if (json.focusSessions) window.localStorage.setItem('zenith_focus_v1', JSON.stringify(json.focusSessions));
-          if (json.journal) window.localStorage.setItem('zenith_journal_v1', JSON.stringify(json.journal));
-          if (json.platforms) window.localStorage.setItem('zenith_platforms_v1', JSON.stringify(json.platforms));
-          if (json.settings) window.localStorage.setItem('zenith_settings_v1', JSON.stringify(json.settings));
+          const previous = storage.getSnapshot();
+          const imported: AppDataSnapshot = {
+            ...previous,
+            tasks: json.tasks,
+            habits: Array.isArray(json.habits) ? json.habits : previous.habits,
+            focusSessions: Array.isArray(json.focusSessions) ? json.focusSessions : previous.focusSessions,
+            journal: Array.isArray(json.journal) ? json.journal : previous.journal,
+            platforms: Array.isArray(json.platforms) ? json.platforms : previous.platforms,
+            settings: json.settings && typeof json.settings === 'object' ? json.settings : previous.settings,
+            categories: Array.isArray(json.categories) ? json.categories : previous.categories,
+            activityLogs: Array.isArray(json.activityLogs) ? json.activityLogs : previous.activityLogs,
+          };
+          storage.replaceSnapshot(imported);
+          if (cloudEnabled && !(await syncCloudNow())) {
+            storage.replaceSnapshot(previous);
+            showToast('Cloud save failed; your previous data was restored');
+            return;
+          }
           window.location.reload();
         } else {
           showToast('Invalid backup file format');
@@ -110,32 +113,6 @@ export const SettingsView: React.FC = () => {
       }
     };
     reader.readAsText(file);
-  };
-
-  const handleTestSupabase = async () => {
-    if (!supabaseUrl.trim() || !supabaseKey.trim()) {
-      setSupabaseTestStatus({
-        success: false,
-        message: 'Please provide both URL and Anon Key.',
-      });
-      return;
-    }
-    setSupabaseTesting(true);
-    setSupabaseTestStatus(null);
-    const res = await testSupabaseConnection(supabaseUrl, supabaseKey);
-    setSupabaseTesting(false);
-    setSupabaseTestStatus(res);
-
-    if (res.success) {
-      updateSettings({
-        supabaseSync: {
-          enabled: true,
-          url: supabaseUrl,
-          anonKey: supabaseKey,
-          lastSyncedAt: new Date().toISOString(),
-        },
-      });
-    }
   };
 
   return (
@@ -360,9 +337,9 @@ export const SettingsView: React.FC = () => {
 
         <div className="mt-4 space-y-3">
           <p className="text-xs text-zinc-400 leading-relaxed">
-            All your tasks, habits, and journals are stored securely in your browser&apos;s local
-            storage. Export a snapshot to keep a permanent offline backup or transfer between
-            machines.
+            {cloudEnabled
+              ? 'Your data is synced to your private MongoDB workspace and cached in this browser. Export a JSON snapshot as an additional backup.'
+              : 'Your tasks, habits, and journals are stored in this browser. Export a JSON snapshot to keep an offline backup or transfer between machines.'}
           </p>
 
           <div className="flex flex-wrap gap-2.5 pt-2">
@@ -416,76 +393,39 @@ export const SettingsView: React.FC = () => {
         </div>
       </div>
 
-      {/* 5. Supabase Cloud Sync (Optional) */}
+      {/* 5. MongoDB Cloud Sync */}
       <div className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900/90">
         <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
           <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
             <Cloud className="w-4 h-4 text-[#DC2626] dark:text-[#EF4444]" />
-            Supabase Cloud Database Sync (Optional)
+            MongoDB Cloud Sync
           </h3>
           <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 font-bold">
-            Optional
+            {cloudEnabled ? 'Enabled' : 'Local only'}
           </span>
         </div>
 
-        <div className="mt-4 space-y-3">
-          <p className="text-xs text-zinc-400 leading-relaxed">
-            Want multi-device sync with your own free Supabase PostgreSQL database? Run the schema in{' '}
-            <code className="text-[#DC2626] dark:text-[#EF4444] font-mono text-[11px]">
-              supabase/schema.sql
-            </code>{' '}
-            and enter your project endpoint and anon key below.
-          </p>
-
-          <div className="space-y-3">
-            <div>
-              <label className="text-xs text-zinc-400 block mb-1">Supabase Project URL</label>
-              <Input
-                placeholder="https://xyzcompany.supabase.co"
-                value={supabaseUrl}
-                onChange={(e) => setSupabaseUrl(e.target.value)}
-                className="text-xs h-8"
-              />
-            </div>
-
-            <div>
-              <label className="text-xs text-zinc-400 block mb-1">Supabase Anon Public Key</label>
-              <Input
-                type="password"
-                placeholder="eyJhbGciOiJIUzI1NiIsIn..."
-                value={supabaseKey}
-                onChange={(e) => setSupabaseKey(e.target.value)}
-                className="text-xs h-8"
-              />
-            </div>
-
-            <div className="flex items-center gap-3 pt-1">
-              <Button
-                size="sm"
-                variant="primary"
-                onClick={handleTestSupabase}
-                disabled={supabaseTesting}
-                className="text-xs gap-1.5 h-8"
-              >
-                {supabaseTesting ? 'Testing Connection...' : 'Test & Save Connection'}
-              </Button>
-
-              {supabaseTestStatus && (
-                <div
-                  className={`text-xs flex items-center gap-1.5 font-medium ${
-                    supabaseTestStatus.success ? 'text-emerald-600' : 'text-rose-500'
-                  }`}
-                >
-                  {supabaseTestStatus.success ? (
-                    <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  ) : (
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                  )}
-                  <span>{supabaseTestStatus.message}</span>
-                </div>
-              )}
-            </div>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              {cloudEnabled
+                ? 'Your browser data is backed up to your private MongoDB database and syncs across signed-in devices.'
+                : 'Cloud sync activates after MongoDB, app password, and session secret variables are configured on the server.'}
+            </p>
+            {cloudEnabled && (
+              <p className={`mt-2 text-xs font-medium ${cloudSyncStatus === 'error' ? 'text-rose-500' : 'text-zinc-500'}`}>
+                {cloudSyncStatus === 'syncing' && 'Syncing changes…'}
+                {cloudSyncStatus === 'synced' && 'Cloud data is up to date'}
+                {cloudSyncStatus === 'error' && 'Cloud sync failed. Check your connection and retry.'}
+                {cloudSyncStatus === 'local' && 'Waiting for sign in'}
+              </p>
+            )}
           </div>
+          {cloudEnabled && (
+            <Button size="sm" variant="outline" onClick={() => void syncCloudNow()} disabled={cloudSyncStatus === 'syncing'}>
+              {cloudSyncStatus === 'syncing' ? 'Syncing…' : 'Sync now'}
+            </Button>
+          )}
         </div>
       </div>
     </div>

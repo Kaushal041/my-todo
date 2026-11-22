@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import {
   Task,
   Habit,
@@ -11,7 +11,7 @@ import {
   Category,
   ActiveView,
 } from '@/types';
-import { storage } from '@/lib/storage';
+import { storage, type AppDataSnapshot } from '@/lib/storage';
 import { generateId } from '@/lib/utils';
 import { soundFx } from '@/lib/audio';
 import { fireTaskConfetti } from '@/lib/confetti';
@@ -44,6 +44,9 @@ interface AppContextType {
   isAiModalOpen: boolean;
   toast: ToastItem | null;
   isLoading: boolean;
+  cloudEnabled: boolean;
+  cloudSyncStatus: 'local' | 'syncing' | 'synced' | 'error';
+  syncCloudNow: () => Promise<boolean>;
 
   // View & UI controls
   setActiveView: (view: ActiveView) => void;
@@ -94,6 +97,27 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+function applyTheme(theme: 'dark' | 'light' | 'system') {
+  if (typeof document === 'undefined') return;
+  const root = document.documentElement;
+  const isDark =
+    theme === 'system'
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : theme === 'dark';
+
+  if (isDark) {
+    root.classList.add('dark');
+    root.classList.remove('light');
+    root.setAttribute('data-theme', 'dark');
+    root.style.colorScheme = 'dark';
+  } else {
+    root.classList.remove('dark');
+    root.classList.add('light');
+    root.setAttribute('data-theme', 'light');
+    root.style.colorScheme = 'light';
+  }
+}
+
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -113,6 +137,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [toast, setToast] = useState<ToastItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [cloudEnabled, setCloudEnabled] = useState(false);
+  const [cloudAuthenticated, setCloudAuthenticated] = useState(false);
+  const [cloudSyncStatus, setCloudSyncStatus] = useState<'local' | 'syncing' | 'synced' | 'error'>('local');
+  const lastCloudUpdatedAt = useRef('');
 
   // Set active view with browser URL history push
   const setActiveView = useCallback((view: ActiveView, pushToHistory = true) => {
@@ -138,6 +166,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     ];
 
     if (initialView && validViews.includes(initialView)) {
+      // Read URL state after hydration to avoid a server/client render mismatch.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveViewState(initialView);
     } else {
       // Set initial history state
@@ -184,80 +214,191 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize from storage on mount
   useEffect(() => {
-    try {
-      // Automatic migration to Kaushal's clean workspace
-      if (typeof window !== 'undefined') {
-        const hasKaushalInit = window.localStorage.getItem('zenith_kaushal_clean_v1');
-        if (!hasKaushalInit) {
+    let cancelled = false;
+    const applySnapshot = (snapshot: AppDataSnapshot) => {
+      storage.replaceSnapshot(snapshot);
+      setTasks(snapshot.tasks);
+      setHabits(snapshot.habits);
+      setFocusSessions(snapshot.focusSessions);
+      setJournal(snapshot.journal);
+      setCategories(snapshot.categories);
+      setPlatforms(snapshot.platforms);
+      setSettings(snapshot.settings);
+      setActivityLogs(snapshot.activityLogs);
+      soundFx.setSoundEnabled(snapshot.settings.soundEffects);
+      applyTheme(snapshot.settings.theme);
+    };
+
+    const initialize = async () => {
+      try {
+        // Mark migration completion without deleting existing browser data.
+        if (typeof window !== 'undefined' && !window.localStorage.getItem('zenith_kaushal_clean_v1')) {
           window.localStorage.setItem('zenith_kaushal_clean_v1', 'true');
-          window.localStorage.removeItem('zenith_tasks_v1');
-          window.localStorage.removeItem('zenith_habits_v1');
-          window.localStorage.removeItem('zenith_focus_v1');
-          window.localStorage.removeItem('zenith_journal_v1');
           const currentSettings = storage.getSettings();
-          currentSettings.userName = 'Kaushal';
-          storage.saveSettings(currentSettings);
+          if (!currentSettings.userName || currentSettings.userName === 'Alex') {
+            currentSettings.userName = 'Kaushal';
+            storage.saveSettings(currentSettings);
+          }
         }
-      }
 
-      const storedTasks = storage.getTasks();
-      const storedHabits = storage.getHabits();
-      const storedFocus = storage.getFocusSessions();
-      const storedJournal = storage.getJournal();
-      const storedCategories = storage.getCategories();
-      const storedPlatforms = storage.getPlatforms();
-      const storedSettings = storage.getSettings();
-      const storedActivity = storage.getActivityLogs();
+        const storedTasks = storage.getTasks();
+        const storedHabits = storage.getHabits();
+        const storedFocus = storage.getFocusSessions();
+        const storedJournal = storage.getJournal();
+        const storedCategories = storage.getCategories();
+        const storedPlatforms = storage.getPlatforms();
+        const storedSettings = storage.getSettings();
+        const storedActivity = storage.getActivityLogs();
 
-      setTasks(storedTasks);
-      setHabits(storedHabits);
-      setFocusSessions(storedFocus);
-      setJournal(storedJournal);
-      setCategories(storedCategories);
-      setPlatforms(storedPlatforms);
-      setSettings(storedSettings);
-      setActivityLogs(storedActivity);
-      soundFx.setSoundEnabled(storedSettings.soundEffects);
+        setTasks(storedTasks);
+        setHabits(storedHabits);
+        setFocusSessions(storedFocus);
+        setJournal(storedJournal);
+        setCategories(storedCategories);
+        setPlatforms(storedPlatforms);
+        setSettings(storedSettings);
+        setActivityLogs(storedActivity);
+        soundFx.setSoundEnabled(storedSettings.soundEffects);
 
-      // Apply initial theme
-      applyTheme(storedSettings.theme);
+        // Apply initial theme
+        applyTheme(storedSettings.theme);
 
-      // Register Service Worker for PWA if supported
-      if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch((err) => {
-            console.log('SW registration failed:', err);
+        const sessionResponse = await fetch('/api/auth/session', { cache: 'no-store' });
+        if (sessionResponse.ok) {
+          const session = await sessionResponse.json() as { cloudEnabled?: boolean; authenticated?: boolean };
+          if (session.cloudEnabled) {
+            setCloudEnabled(true);
+            if (session.authenticated) {
+              storage.setCloudSyncEnabled(true);
+              const dataResponse = await fetch('/api/data', { cache: 'no-store', credentials: 'same-origin' });
+              if (dataResponse.ok) {
+                const cloud = await dataResponse.json() as { data: AppDataSnapshot | null; updatedAt: string | null };
+                let cloudSaved = true;
+                if (cloud.data) {
+                  applySnapshot(cloud.data);
+                  lastCloudUpdatedAt.current = cloud.updatedAt || '';
+                } else {
+                  cloudSaved = await storage.syncNow();
+                }
+                setCloudAuthenticated(true);
+                setCloudSyncStatus(cloudSaved ? 'synced' : 'error');
+              } else {
+                setCloudSyncStatus('error');
+              }
+            }
+          }
+        }
+
+        // Register Service Worker for PWA if supported
+        if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch((err) => {
+              console.log('SW registration failed:', err);
+            });
           });
-        });
+        }
+      } catch (e) {
+        console.error('Initialization error', e);
+      } finally {
+        if (!cancelled) setIsLoading(false);
       }
-    } catch (e) {
-      console.error('Initialization error', e);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+    void initialize();
+    return () => { cancelled = true; };
   }, []);
 
-  // Theme helper: manages .dark and .light classes, data-theme attribute, and colorScheme
-  const applyTheme = (theme: 'dark' | 'light' | 'system') => {
-    if (typeof document === 'undefined') return;
-    const root = document.documentElement;
-    const isDark =
-      theme === 'system'
-        ? window.matchMedia('(prefers-color-scheme: dark)').matches
-        : theme === 'dark';
+  useEffect(() => {
+    if (!cloudEnabled || !cloudAuthenticated) return;
 
-    if (isDark) {
-      root.classList.add('dark');
-      root.classList.remove('light');
-      root.setAttribute('data-theme', 'dark');
-      root.style.colorScheme = 'dark';
-    } else {
-      root.classList.remove('dark');
-      root.classList.add('light');
-      root.setAttribute('data-theme', 'light');
-      root.style.colorScheme = 'light';
+    const handleSyncStatus = (event: Event) => {
+      const status = (event as CustomEvent<'syncing' | 'synced' | 'error'>).detail;
+      setCloudSyncStatus(status);
+    };
+    window.addEventListener('zenith:cloud-sync-status', handleSyncStatus);
+
+    const refreshFromCloud = async () => {
+      try {
+        const response = await fetch('/api/data', { cache: 'no-store', credentials: 'same-origin' });
+        if (!response.ok) throw new Error(`Cloud refresh failed (${response.status}).`);
+        const cloud = await response.json() as { data: AppDataSnapshot | null; updatedAt: string | null };
+        if (!cloud.data || !cloud.updatedAt || cloud.updatedAt === lastCloudUpdatedAt.current) return;
+        if (storage.getLastLocalChangeAt() > 0) return;
+
+        storage.replaceSnapshot(cloud.data);
+        setTasks(cloud.data.tasks);
+        setHabits(cloud.data.habits);
+        setFocusSessions(cloud.data.focusSessions);
+        setJournal(cloud.data.journal);
+        setCategories(cloud.data.categories);
+        setPlatforms(cloud.data.platforms);
+        setSettings(cloud.data.settings);
+        setActivityLogs(cloud.data.activityLogs);
+        soundFx.setSoundEnabled(cloud.data.settings.soundEffects);
+        applyTheme(cloud.data.settings.theme);
+        lastCloudUpdatedAt.current = cloud.updatedAt;
+        setCloudSyncStatus('synced');
+      } catch {
+        setCloudSyncStatus('error');
+      }
+    };
+    const timer = window.setInterval(() => { void refreshFromCloud(); }, 15_000);
+    return () => {
+      window.removeEventListener('zenith:cloud-sync-status', handleSyncStatus);
+      window.clearInterval(timer);
+    };
+  }, [cloudEnabled, cloudAuthenticated]);
+
+  const finishCloudLogin = useCallback(async (password: string): Promise<string | null> => {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ password }),
+    });
+    if (!response.ok) {
+      const result = await response.json().catch(() => ({})) as { error?: string };
+      return result.error || 'Could not sign in.';
     }
-  };
+
+    storage.setCloudSyncEnabled(true);
+    const dataResponse = await fetch('/api/data', { cache: 'no-store', credentials: 'same-origin' });
+    if (!dataResponse.ok) {
+      storage.setCloudSyncEnabled(false);
+      return 'Signed in, but MongoDB could not be reached. Check the server configuration.';
+    }
+    const cloud = await dataResponse.json() as { data: AppDataSnapshot | null; updatedAt: string | null };
+    if (cloud.data) {
+      storage.replaceSnapshot(cloud.data);
+      setTasks(cloud.data.tasks);
+      setHabits(cloud.data.habits);
+      setFocusSessions(cloud.data.focusSessions);
+      setJournal(cloud.data.journal);
+      setCategories(cloud.data.categories);
+      setPlatforms(cloud.data.platforms);
+      setSettings(cloud.data.settings);
+      setActivityLogs(cloud.data.activityLogs);
+      soundFx.setSoundEnabled(cloud.data.settings.soundEffects);
+      applyTheme(cloud.data.settings.theme);
+      lastCloudUpdatedAt.current = cloud.updatedAt || '';
+    } else {
+      // First sign-in migrates this browser's existing Local Storage data.
+      const saved = await storage.syncNow();
+      if (!saved) {
+        storage.setCloudSyncEnabled(false);
+        return 'Could not copy this browser\'s data to MongoDB. Please try again.';
+      }
+    }
+
+    setCloudAuthenticated(true);
+    setCloudSyncStatus('synced');
+    return null;
+  }, []);
+
+  const syncCloudNow = useCallback(async (): Promise<boolean> => {
+    const saved = await storage.syncNow();
+    setCloudSyncStatus(saved ? 'synced' : 'error');
+    return saved;
+  }, []);
 
   const showToast = useCallback((text: string, action?: { label: string; onClick: () => void }) => {
     const id = generateId();
@@ -665,7 +806,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             // Calculate consecutive streak up to today
             const todayStr = format(new Date(), 'yyyy-MM-dd');
             let currentStreak = 0;
-            let checkDate = new Date();
+            const checkDate = new Date();
 
             // If today is completed or yesterday was completed
             while (true) {
@@ -862,6 +1003,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         isAiModalOpen,
         toast,
         isLoading,
+        cloudEnabled,
+        cloudSyncStatus,
+        syncCloudNow,
 
         setActiveView,
         setSearchQuery,
@@ -903,8 +1047,61 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         resetAllData,
       }}
     >
-      {children}
+      {isLoading ? (
+        <div className="flex min-h-screen items-center justify-center bg-[#080808] text-sm text-zinc-400">
+          Loading your workspace…
+        </div>
+      ) : cloudEnabled && !cloudAuthenticated ? (
+        <CloudLoginScreen onLogin={finishCloudLogin} />
+      ) : children}
     </AppContext.Provider>
+  );
+}
+
+function CloudLoginScreen({ onLogin }: { onLogin: (password: string) => Promise<string | null> }) {
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitting(true);
+    setError('');
+    try {
+      const message = await onLogin(password);
+      if (message) setError(message);
+    } catch {
+      setError('Could not connect to the cloud service. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-[#080808] px-4 text-white">
+      <form onSubmit={submit} className="w-full max-w-sm rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-2xl">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-red-400">Kaushal OS</p>
+        <h1 className="mt-3 text-xl font-bold">Sign in to your private workspace</h1>
+        <p className="mt-2 text-sm leading-6 text-zinc-400">Enter the app password configured by the owner to access synced data.</p>
+        <input
+          type="password"
+          autoComplete="current-password"
+          required
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          placeholder="App password"
+          className="mt-5 h-10 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 text-sm outline-none focus:border-red-500"
+        />
+        {error && <p role="alert" className="mt-3 text-sm text-rose-400">{error}</p>}
+        <button
+          type="submit"
+          disabled={submitting}
+          className="mt-4 h-10 w-full rounded-lg bg-red-600 text-sm font-semibold hover:bg-red-500 disabled:opacity-50"
+        >
+          {submitting ? 'Signing in…' : 'Sign in'}
+        </button>
+      </form>
+    </main>
   );
 }
 

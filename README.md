@@ -75,7 +75,7 @@ Built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, **Rechart
 - **Audio Engine**: Web Audio API (zero external sound file dependencies)
 - **Celebrations**: Canvas-Confetti
 - **Date Utilities**: Date-fns
-- **Persistence**: LocalStorage abstraction + Optional Supabase PostgreSQL Sync
+- **Persistence**: Browser Local Storage with optional authenticated MongoDB sync
 
 ---
 
@@ -108,13 +108,16 @@ Built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, **Rechart
 
 ---
 
-## ☁️ Optional Supabase Cloud Sync
+## ☁️ Optional MongoDB Cloud Sync
 
-Zenith works out of the box locally without any external accounts. If you want multi-device cloud synchronization:
+Zenith runs locally without a database. To enable private, multi-device sync:
 
-1. Create a free project on [Supabase](https://supabase.com).
-2. Go to the SQL Editor in your Supabase dashboard and run the queries in `supabase/schema.sql`.
-3. In Zenith, navigate to **Settings** -> **Supabase Cloud Database Sync**, enter your project URL and Anon key, and click **Test & Save Connection**.
+1. Create a MongoDB Atlas cluster and a database user with read/write access.
+2. Add the server-only variables from `.env.example` to `.env.local` for development and to Vercel Project Settings for deployment: `MONGODB_URI`, `MONGODB_DB`, `APP_PASSWORD`, and `SESSION_SECRET`. Do not prefix these with `NEXT_PUBLIC_`.
+3. Set a private `APP_PASSWORD` of at least 12 characters and a random `SESSION_SECRET` with at least 32 characters.
+4. Open the app on a device and sign in with `APP_PASSWORD`. The first sign-in copies that browser's current Local Storage data to MongoDB when the cloud database is empty. On other devices, sign in to load the cloud copy.
+
+The app stores one private owner's workspace in MongoDB. If a cloud copy already exists, signing in uses that copy and replaces the current browser's local cache. Export a JSON backup first if you need to preserve local data from another device.
 
 ---
 
@@ -124,7 +127,7 @@ The easiest way to deploy Zenith is using the [Vercel Platform](https://vercel.c
 
 1. Push your repository to GitHub.
 2. Import the repository into Vercel.
-3. (Optional) Add your `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` environment variables.
+3. (Optional) Add the MongoDB server-only variables above in Vercel Project Settings to enable cloud sync.
 4. Click **Deploy**. Zenith will build and deploy instantly with Turbopack!
 
 ---
