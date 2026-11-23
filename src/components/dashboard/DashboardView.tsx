@@ -132,10 +132,16 @@ export const DashboardView: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
         <MetricCard
           title="Due Today"
-          value={dueTodayTotal}
-          subtitle={`${dueTodayCompleted} completed (${dueTodayTotal > 0 ? Math.round((dueTodayCompleted / dueTodayTotal) * 100) : 0}%)`}
+          value={dueTodayPending}
+          subtitle={
+            dueTodayPending === 0 && dueTodayCompleted > 0
+              ? `${dueTodayCompleted} completed (All done! 🎉)`
+              : dueTodayTotal === 0
+              ? 'All caught up!'
+              : `${dueTodayCompleted} of ${dueTodayTotal} done (${Math.round((dueTodayCompleted / dueTodayTotal) * 100)}%)`
+          }
           icon={SunMedium}
-          highlight
+          highlight={dueTodayPending > 0}
           onClick={() => setActiveView('my-day')}
         />
 

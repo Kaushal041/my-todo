@@ -120,12 +120,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
         <div className="flex flex-col gap-5 overflow-y-auto pr-1">
           {/* Logo & Workspace */}
           <div className="flex items-center justify-between px-2 pt-1">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-red-gradient flex items-center justify-center shadow-lg shadow-[#DC2626]/35 text-white font-black text-base border border-[#EF4444]/40">
+            <button
+              type="button"
+              onClick={() => handleSelectView('dashboard')}
+              title="Go to Dashboard Overview"
+              className="flex items-center gap-2.5 text-left cursor-pointer group rounded-xl p-1 -ml-1 transition-all hover:bg-zinc-100 dark:hover:bg-[#171717] active:scale-95 select-none"
+            >
+              <div className="w-8 h-8 rounded-xl bg-red-gradient flex items-center justify-center shadow-lg shadow-[#DC2626]/35 text-white font-black text-base border border-[#EF4444]/40 transition-transform group-hover:scale-105">
                 K
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-black tracking-tight text-zinc-900 dark:text-[#FAFAFA] flex items-center gap-1.5">
+                <span className="text-sm font-black tracking-tight text-zinc-900 dark:text-[#FAFAFA] flex items-center gap-1.5 group-hover:text-[#DC2626] dark:group-hover:text-[#EF4444] transition-colors">
                   Kaushal OS
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#EF4444] animate-pulse" />
                 </span>
@@ -133,7 +138,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onCloseMobile }) => {
                   Productivity OS
                 </span>
               </div>
-            </div>
+            </button>
 
             <div className="flex items-center gap-1">
               <button
